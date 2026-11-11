@@ -1,0 +1,2458 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Yönetim Stüdyosu | Amil Salih Güngören Portfolyo & Dijital Arşiv</title>
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Cinzel:wght@600;700;800;900&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+    .font-serif-cv {
+      font-family: 'Cinzel', serif;
+    }
+    /* Özel kaydırma çubuğu */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #f1f5f9;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
+    }
+    .line-clamp-2 {
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+  </style>
+</head>
+<body class="bg-slate-100 text-slate-800 min-h-screen flex flex-col selection:bg-[#1E2D3D] selection:text-white">
+
+  <!-- ================= GİRİŞ / KİLİT EKRANI ================= -->
+  <div id="login-screen" class="fixed inset-0 z-50 bg-[#1E2D3D] flex items-center justify-center p-4">
+    <div class="w-full max-w-md bg-white rounded-3xl shadow-2xl p-8 border border-slate-200 text-center space-y-6">
+      <div class="w-16 h-16 rounded-2xl bg-slate-900 text-white mx-auto flex items-center justify-center shadow-lg">
+        <i data-lucide="shield-check" class="w-8 h-8 text-amber-400"></i>
+      </div>
+      <div>
+        <h1 class="text-2xl font-black text-[#1E2D3D] tracking-wide">Yönetim Stüdyosu</h1>
+        <p class="text-xs text-slate-500 mt-1">Amil Salih Güngören | Portfolyo & Dijital İlim Arşivi</p>
+      </div>
+
+      <div class="space-y-3 text-left">
+        <label class="block text-xs font-bold text-slate-600 uppercase tracking-wider">Yönetici Parolası</label>
+        <div class="relative">
+          <input type="password" id="admin-pass-input" onkeydown="if(event.key==='Enter') handleLogin()" placeholder="Parolayı giriniz..." class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:outline-hidden focus:ring-2 focus:ring-[#1E2D3D] focus:border-transparent text-sm">
+          <button onclick="togglePasswordVisibility()" class="absolute right-3 top-3 text-slate-400 hover:text-slate-600">
+            <i data-lucide="eye" class="w-5 h-5"></i>
+          </button>
+        </div>
+        <p class="text-[11px] text-slate-400">Yalnızca yetkili yönetici erişimine mahsustur.</p>
+      </div>
+
+      <button onclick="handleLogin()" class="w-full py-3.5 rounded-xl bg-[#1E2D3D] hover:bg-slate-800 text-white font-bold text-sm shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-2">
+        <span>Giriş Yap</span>
+        <i data-lucide="arrow-right" class="w-4 h-4"></i>
+      </button>
+
+      <div class="pt-2">
+        <a href="index.html" class="text-xs text-slate-500 hover:text-[#1E2D3D] inline-flex items-center gap-1 font-medium">
+          <i data-lucide="arrow-left" class="w-3.5 h-3.5"></i>
+          <span>Siteye Geri Dön</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= ANA YÖNETİM STÜDYOSU UYGULAMASI ================= -->
+  <div id="admin-app" class="hidden min-h-screen flex flex-col">
+
+    <!-- ÜST ÇUBUK (TOPBAR) -->
+    <header class="bg-[#1E2D3D] text-white sticky top-0 z-40 border-b border-[#2A3C4E] shadow-md px-4 sm:px-6 py-3 flex flex-wrap items-center justify-between gap-3">
+      
+      <!-- Sol: Başlık & Canlı Durum Rozeti -->
+      <div class="flex items-center gap-3">
+        <div class="w-9 h-9 rounded-xl bg-white/10 border border-white/20 flex items-center justify-center text-amber-400 font-bold shrink-0">
+          <i data-lucide="sliders" class="w-5 h-5"></i>
+        </div>
+        <div>
+          <div class="text-xs sm:text-sm font-extrabold tracking-wide uppercase flex items-center gap-2">
+            <span>Yönetim Stüdyosu 2.0</span>
+            <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 text-[10px] font-semibold border border-emerald-500/30">
+              <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+              <span>Canlı Senkronize</span>
+            </span>
+          </div>
+          <div class="text-[11px] text-slate-300 hidden sm:block">Amil Salih Güngören &bull; Bütün Verileri Anlık Düzenleme & Silme Merkezi</div>
+        </div>
+      </div>
+
+      <!-- Sağ: Eylemler (Siteyi Aç, Canlı Önizle, data.js İndir, Kaydet, Çıkış) -->
+      <div class="flex items-center gap-2">
+        <!-- data.js'den Yeniden Çek (Varsayılana Eşitle) -->
+        <button onclick="syncFromDataJs()" class="px-2.5 py-1.5 sm:px-3 sm:py-2 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 text-white text-xs font-semibold flex items-center gap-1.5 transition-all" title="Orijinal data.js dosyasındaki verileri sıfırdan çekip paneli eşitler">
+          <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i>
+          <span class="hidden md:inline">data.js ile Eşitle</span>
+        </button>
+
+        <!-- Siteyi Aç -->
+        <a href="index.html" target="_blank" class="px-2.5 py-1.5 sm:px-3 sm:py-2 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 text-white text-xs font-semibold flex items-center gap-1.5 transition-all" title="Siteyi Yeni Sekmede Aç">
+          <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+          <span class="hidden sm:inline">Siteyi Aç</span>
+        </a>
+
+        <!-- data.js İndir -->
+        <button onclick="exportDataJs()" class="px-2.5 py-1.5 sm:px-3 sm:py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold flex items-center gap-1.5 shadow-sm transition-all" title="En güncel halini assets/js/data.js dosyası olarak indir">
+          <i data-lucide="download" class="w-3.5 h-3.5"></i>
+          <span class="hidden lg:inline">data.js İndir</span>
+        </button>
+
+        <!-- Canlı Kaydet (LocalStorage) -->
+        <button onclick="saveAllChanges(true)" class="px-3.5 py-1.5 sm:px-4 sm:py-2 rounded-xl bg-amber-400 hover:bg-amber-500 text-slate-950 text-xs font-black flex items-center gap-1.5 shadow-md transition-all hover:scale-105" title="Tüm değişiklikleri tarayıcıya ve siteye anında uygular">
+          <i data-lucide="save" class="w-4 h-4"></i>
+          <span>Değişiklikleri Kaydet</span>
+        </button>
+
+        <!-- Çıkış Yap -->
+        <button onclick="handleLogout()" class="p-2 rounded-xl bg-white/5 hover:bg-rose-600 text-white/80 hover:text-white transition-colors" title="Güvenli Çıkış">
+          <i data-lucide="log-out" class="w-4 h-4"></i>
+        </button>
+      </div>
+
+    </header>
+
+    <!-- ANA GÖVDE: SOL MENÜ + SAĞ İÇERİK -->
+    <div class="flex-1 flex flex-col md:flex-row max-w-7xl w-full mx-auto p-3 sm:p-6 gap-6">
+
+      <!-- SOL MENÜ (TÜM BÖLÜMLERİN ERİŞİM LİSTESİ) -->
+      <aside class="w-full md:w-64 bg-white rounded-2xl p-3 border border-slate-200 shadow-xs shrink-0 flex flex-row md:flex-col gap-1 overflow-x-auto md:overflow-visible">
+        
+        <div class="hidden md:block px-3 py-1.5 text-[10px] font-bold text-slate-400 uppercase tracking-wider">Ana Menü</div>
+
+        <button onclick="switchTab('dashboard')" class="admin-nav-btn active w-full px-3 py-2 rounded-xl text-left text-xs sm:text-sm font-bold flex items-center gap-2.5 transition-all text-slate-700 hover:bg-slate-100 whitespace-nowrap" data-tab="dashboard">
+          <i data-lucide="layout-dashboard" class="w-4 h-4"></i>
+          <span>Genel Bakış</span>
+        </button>
+
+        <button onclick="switchTab('books')" class="admin-nav-btn w-full px-3 py-2 rounded-xl text-left text-xs sm:text-sm font-bold flex items-center gap-2.5 transition-all text-slate-700 hover:bg-slate-100 whitespace-nowrap" data-tab="books">
+          <i data-lucide="book-open" class="w-4 h-4 text-orange-600"></i>
+          <span>Kitaplar & Külliyat (39)</span>
+        </button>
+
+        <button onclick="switchTab('education')" class="admin-nav-btn w-full px-3 py-2 rounded-xl text-left text-xs sm:text-sm font-bold flex items-center gap-2.5 transition-all text-slate-700 hover:bg-slate-100 whitespace-nowrap" data-tab="education">
+          <i data-lucide="graduation-cap" class="w-4 h-4 text-blue-600"></i>
+          <span>Eğitim Geçmişi</span>
+        </button>
+
+        <button onclick="switchTab('experience')" class="admin-nav-btn w-full px-3 py-2 rounded-xl text-left text-xs sm:text-sm font-bold flex items-center gap-2.5 transition-all text-slate-700 hover:bg-slate-100 whitespace-nowrap" data-tab="experience">
+          <i data-lucide="briefcase" class="w-4 h-4 text-emerald-600"></i>
+          <span>Deneyim & Kariyer</span>
+        </button>
+
+        <button onclick="switchTab('languages')" class="admin-nav-btn w-full px-3 py-2 rounded-xl text-left text-xs sm:text-sm font-bold flex items-center gap-2.5 transition-all text-slate-700 hover:bg-slate-100 whitespace-nowrap" data-tab="languages">
+          <i data-lucide="languages" class="w-4 h-4 text-indigo-600"></i>
+          <span>Diller & Beceriler</span>
+        </button>
+
+        <button onclick="switchTab('certificates')" class="admin-nav-btn w-full px-3 py-2 rounded-xl text-left text-xs sm:text-sm font-bold flex items-center gap-2.5 transition-all text-slate-700 hover:bg-slate-100 whitespace-nowrap" data-tab="certificates">
+          <i data-lucide="award" class="w-4 h-4 text-amber-600"></i>
+          <span>Belgeler & Sertifikalar</span>
+        </button>
+
+        <button onclick="switchTab('profile')" class="admin-nav-btn w-full px-3 py-2 rounded-xl text-left text-xs sm:text-sm font-bold flex items-center gap-2.5 transition-all text-slate-700 hover:bg-slate-100 whitespace-nowrap" data-tab="profile">
+          <i data-lucide="user" class="w-4 h-4 text-slate-600"></i>
+          <span>Biyografi & İletişim</span>
+        </button>
+
+        <div class="hidden md:block my-2 border-t border-slate-200"></div>
+        <div class="hidden md:block px-3 py-1.5 text-[10px] font-bold text-slate-400 uppercase tracking-wider">İçerik & Modüller</div>
+
+        <button onclick="switchTab('pages')" class="admin-nav-btn w-full px-3 py-2 rounded-xl text-left text-xs sm:text-sm font-bold flex items-center gap-2.5 transition-all text-slate-700 hover:bg-slate-100 whitespace-nowrap" data-tab="pages">
+          <i data-lucide="layers" class="w-4 h-4 text-teal-600"></i>
+          <span>Sayfa & Menü Yönetimi</span>
+        </button>
+
+        <button onclick="switchTab('articles')" class="admin-nav-btn w-full px-3 py-2 rounded-xl text-left text-xs sm:text-sm font-bold flex items-center gap-2.5 transition-all text-slate-700 hover:bg-slate-100 whitespace-nowrap" data-tab="articles">
+          <i data-lucide="file-text" class="w-4 h-4 text-emerald-600"></i>
+          <span>Makaleler & PDF</span>
+        </button>
+
+        <button onclick="switchTab('media')" class="admin-nav-btn w-full px-3 py-2 rounded-xl text-left text-xs sm:text-sm font-bold flex items-center gap-2.5 transition-all text-slate-700 hover:bg-slate-100 whitespace-nowrap" data-tab="media">
+          <i data-lucide="headphones" class="w-4 h-4 text-purple-600"></i>
+          <span>Ses & Video Arşivi</span>
+        </button>
+
+        <button onclick="switchTab('blog')" class="admin-nav-btn w-full px-3 py-2 rounded-xl text-left text-xs sm:text-sm font-bold flex items-center gap-2.5 transition-all text-slate-700 hover:bg-slate-100 whitespace-nowrap" data-tab="blog">
+          <i data-lucide="pen-tool" class="w-4 h-4 text-rose-600"></i>
+          <span>Yazılar & Notlar</span>
+        </button>
+
+        <button onclick="switchTab('forum')" class="admin-nav-btn w-full px-3 py-2 rounded-xl text-left text-xs sm:text-sm font-bold flex items-center gap-2.5 transition-all text-slate-700 hover:bg-slate-100 whitespace-nowrap" data-tab="forum">
+          <i data-lucide="messages-square" class="w-4 h-4 text-blue-600"></i>
+          <span>Forum & İlim Meclisi</span>
+        </button>
+
+        <div class="hidden md:block my-2 border-t border-slate-200"></div>
+        <div class="hidden md:block px-3 py-1.5 text-[10px] font-bold text-slate-400 uppercase tracking-wider">Gelişmiş Araçlar</div>
+
+        <button onclick="switchTab('preview')" class="admin-nav-btn w-full px-3 py-2 rounded-xl text-left text-xs sm:text-sm font-bold flex items-center gap-2.5 transition-all text-slate-700 hover:bg-slate-100 whitespace-nowrap" data-tab="preview">
+          <i data-lucide="eye" class="w-4 h-4 text-sky-600"></i>
+          <span>Canlı Önizleme (Iframe)</span>
+        </button>
+
+        <button onclick="switchTab('backup')" class="admin-nav-btn w-full px-3 py-2 rounded-xl text-left text-xs sm:text-sm font-bold flex items-center gap-2.5 transition-all text-slate-700 hover:bg-slate-100 whitespace-nowrap" data-tab="backup">
+          <i data-lucide="hard-drive" class="w-4 h-4 text-slate-500"></i>
+          <span>Yedekleme & İhracat</span>
+        </button>
+
+        <button onclick="switchTab('settings')" class="admin-nav-btn w-full px-3 py-2 rounded-xl text-left text-xs sm:text-sm font-bold flex items-center gap-2.5 transition-all text-slate-700 hover:bg-slate-100 whitespace-nowrap" data-tab="settings">
+          <i data-lucide="lock" class="w-4 h-4 text-slate-500"></i>
+          <span>Şifre & Güvenlik</span>
+        </button>
+
+      </aside>
+
+      <!-- SAĞ İÇERİK ALANI -->
+      <main class="flex-1 min-w-0 space-y-6">
+
+        <!-- ================= 1. TAB: GENEL BAKIŞ (DASHBOARD) ================= -->
+        <section id="tab-dashboard" class="tab-content space-y-6">
+          
+          <!-- Hoş Geldiniz Banner -->
+          <div class="bg-gradient-to-r from-[#1E2D3D] via-slate-900 to-[#1E2D3D] rounded-3xl p-6 sm:p-8 text-white shadow-md relative overflow-hidden">
+            <div class="relative z-10 space-y-2 max-w-2xl">
+              <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/10 text-amber-300 text-xs font-semibold border border-white/15">
+                <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
+                <span>Tüm Sitenin Merkezi Kontrol Paneli</span>
+              </span>
+              <h2 class="text-2xl sm:text-3xl font-black tracking-tight">Amil Salih Güngören Yönetim Stüdyosu</h2>
+              <p class="text-xs sm:text-sm text-slate-300 leading-relaxed">
+                Bu stüdyoda sitenizdeki **tüm veriler (39 kitap, eğitimleriniz, avukatlık ve editörlük deneyimleriniz, dilleriniz ve biyografiniz)** anlık olarak listelenir. İstediğiniz veriyi silebilir, kelime kelime düzenleyebilir veya yeni içerikler ekleyebilirsiniz.
+              </p>
+            </div>
+            <i data-lucide="library" class="absolute -right-6 -bottom-8 w-52 h-52 text-white/5 pointer-events-none"></i>
+          </div>
+
+          <!-- İstatistik Kartları -->
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+            <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs flex flex-col justify-between">
+              <div class="flex items-center justify-between text-slate-500 mb-2">
+                <span class="text-xs font-bold uppercase tracking-wider">Külliyat</span>
+                <i data-lucide="book-open" class="w-4 h-4 text-orange-600"></i>
+              </div>
+              <div id="stat-books-count" class="text-2xl sm:text-3xl font-black text-[#1E2D3D]">39</div>
+              <span class="text-[11px] text-slate-400 mt-1">16 Çeviri + 23 Edisyon</span>
+            </div>
+
+            <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs flex flex-col justify-between">
+              <div class="flex items-center justify-between text-slate-500 mb-2">
+                <span class="text-xs font-bold uppercase tracking-wider">Eğitim & Kariyer</span>
+                <i data-lucide="briefcase" class="w-4 h-4 text-blue-600"></i>
+              </div>
+              <div id="stat-edu-exp-count" class="text-2xl sm:text-3xl font-black text-[#1E2D3D]">7</div>
+              <span class="text-[11px] text-slate-400 mt-1">Derece & İş Deneyimi</span>
+            </div>
+
+            <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs flex flex-col justify-between">
+              <div class="flex items-center justify-between text-slate-500 mb-2">
+                <span class="text-xs font-bold uppercase tracking-wider">Diller & Belge</span>
+                <i data-lucide="award" class="w-4 h-4 text-amber-600"></i>
+              </div>
+              <div id="stat-lang-cert-count" class="text-2xl sm:text-3xl font-black text-[#1E2D3D]">4</div>
+              <span class="text-[11px] text-slate-400 mt-1">3 Dil + Yemin Tutanağı</span>
+            </div>
+
+            <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs flex flex-col justify-between">
+              <div class="flex items-center justify-between text-slate-500 mb-2">
+                <span class="text-xs font-bold uppercase tracking-wider">Aktif Sayfalar</span>
+                <i data-lucide="layers" class="w-4 h-4 text-emerald-600"></i>
+              </div>
+              <div id="stat-pages-count" class="text-2xl sm:text-3xl font-black text-[#1E2D3D]">3</div>
+              <span class="text-[11px] text-slate-400 mt-1">Özgeçmiş, Tercüme, Edisyon</span>
+            </div>
+          </div>
+
+          <!-- Hızlı Kılavuz Kartları -->
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div onclick="switchTab('books')" class="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs hover:border-orange-400 transition-all cursor-pointer group">
+              <div class="w-10 h-10 rounded-xl bg-orange-50 text-orange-600 flex items-center justify-center font-bold mb-3 group-hover:scale-110 transition-transform">
+                <i data-lucide="book-plus" class="w-5 h-5"></i>
+              </div>
+              <h4 class="font-bold text-sm text-[#1E2D3D]">Kitapları Yönet</h4>
+              <p class="text-xs text-slate-500 mt-1 leading-relaxed">Mevcut 39 eseri inceleyin, silin, düzenleyin veya yeni kitap ekleyin.</p>
+            </div>
+
+            <div onclick="switchTab('education')" class="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs hover:border-blue-400 transition-all cursor-pointer group">
+              <div class="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center font-bold mb-3 group-hover:scale-110 transition-transform">
+                <i data-lucide="graduation-cap" class="w-5 h-5"></i>
+              </div>
+              <h4 class="font-bold text-sm text-[#1E2D3D]">Eğitimi Düzenle</h4>
+              <p class="text-xs text-slate-500 mt-1 leading-relaxed">Üniversite, yüksek lisans veya lise kayıtlarını düzenleyin ya da silin.</p>
+            </div>
+
+            <div onclick="switchTab('experience')" class="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs hover:border-emerald-400 transition-all cursor-pointer group">
+              <div class="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center font-bold mb-3 group-hover:scale-110 transition-transform">
+                <i data-lucide="briefcase" class="w-5 h-5"></i>
+              </div>
+              <h4 class="font-bold text-sm text-[#1E2D3D]">Deneyimleri Düzenle</h4>
+              <p class="text-xs text-slate-500 mt-1 leading-relaxed">Akademik görev, bürolar ve çalıştığınız yayınevleri listesini güncelleyin.</p>
+            </div>
+          </div>
+
+        </section>
+
+        <!-- ================= 2. TAB: KİTAPLAR & KÜLLİYAT ================= -->
+        <section id="tab-books" class="tab-content hidden space-y-6">
+          <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-xs space-y-5">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-200">
+              <div>
+                <h3 class="text-base font-bold text-[#1E2D3D] flex items-center gap-2">
+                  <span>Yayın Külliyatı</span>
+                  <span id="books-badge-count" class="px-2.5 py-0.5 rounded-full bg-orange-100 text-orange-800 text-xs font-bold">39 Eser</span>
+                </h3>
+                <p class="text-xs text-slate-500 mt-0.5">Sitedeki tüm kitapları anlık görün; istediğinizi silebilir, künyesini güncelleyebilir veya yeni eser ekleyebilirsiniz.</p>
+              </div>
+              <button onclick="openBookModalForNew()" class="px-4 py-2.5 rounded-xl bg-orange-600 hover:bg-orange-700 text-white text-xs font-bold flex items-center gap-2 shadow-xs transition-all shrink-0">
+                <i data-lucide="plus-circle" class="w-4 h-4"></i>
+                <span>+ Yeni Eser Ekle</span>
+              </button>
+            </div>
+
+            <!-- Arama & Filtreleme -->
+            <div class="flex flex-col sm:flex-row items-center gap-3">
+              <div class="relative flex-1 w-full">
+                <i data-lucide="search" class="w-4 h-4 absolute left-3.5 top-3 text-slate-400"></i>
+                <input type="text" id="books-search-input" oninput="filterBooksList()" placeholder="Kitap adı, yazar, yayınevi veya ISBN ara..." class="w-full pl-9 pr-4 py-2.5 rounded-xl border border-slate-200 text-xs focus:ring-2 focus:ring-[#1E2D3D] focus:outline-hidden">
+              </div>
+
+              <div class="flex items-center gap-2 w-full sm:w-auto">
+                <select id="books-category-filter" onchange="filterBooksList()" class="px-3 py-2.5 rounded-xl border border-slate-200 text-xs font-semibold bg-white focus:outline-hidden">
+                  <option value="all">Tüm Eserler (39)</option>
+                  <option value="translations-published">Tercümeler (Yayımlanan - 14)</option>
+                  <option value="translations-prep">Tercümeler (Hazırlık - 2)</option>
+                  <option value="editions">Edisyonlar (23)</option>
+                </select>
+
+                <!-- Görünüm Seçici (Tablo vs Kart) -->
+                <div class="flex items-center bg-slate-100 p-1 rounded-xl border border-slate-200 shrink-0">
+                  <button id="btn-view-table" onclick="setBooksView('table')" class="p-1.5 rounded-lg bg-white shadow-xs text-slate-800" title="Tablo Görünümü">
+                    <i data-lucide="list" class="w-4 h-4"></i>
+                  </button>
+                  <button id="btn-view-grid" onclick="setBooksView('grid')" class="p-1.5 rounded-lg text-slate-500 hover:text-slate-800" title="Kapaklı Kart Görünümü">
+                    <i data-lucide="grid" class="w-4 h-4"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Kitaplar Listesi (Tablo Görünümü) -->
+            <div id="books-table-wrapper" class="overflow-x-auto">
+              <table class="w-full text-left text-xs border-collapse">
+                <thead>
+                  <tr class="bg-slate-50 text-slate-500 font-bold border-b border-slate-200">
+                    <th class="p-3">Kapak</th>
+                    <th class="p-3">Eser Adı & Müellif</th>
+                    <th class="p-3">Kategori</th>
+                    <th class="p-3">Yayınevi & Yıl</th>
+                    <th class="p-3">Künye / ISBN</th>
+                    <th class="p-3 text-right">İşlemler</th>
+                  </tr>
+                </thead>
+                <tbody id="books-management-tbody" class="divide-y divide-slate-100">
+                  <!-- JS ile dolar -->
+                </tbody>
+              </table>
+            </div>
+
+            <!-- Kitaplar Grid Görünümü (Alternatif Kartlar) -->
+            <div id="books-grid-wrapper" class="hidden grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+              <!-- JS ile dolar -->
+            </div>
+
+          </div>
+        </section>
+
+        <!-- ================= 3. TAB: EĞİTİM GEÇMİŞİ ================= -->
+        <section id="tab-education" class="tab-content hidden space-y-6">
+          <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-xs space-y-5">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-200">
+              <div>
+                <h3 class="text-base font-bold text-[#1E2D3D]">Eğitim Geçmişi & Tahsilat</h3>
+                <p class="text-xs text-slate-500 mt-0.5">Sitenin sol sütunundaki Eğitim bölümünde yer alan üniversite, lise ve medrese eğitimlerinizi düzenleyin veya silin.</p>
+              </div>
+              <button onclick="openEducationModalForNew()" class="px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold flex items-center gap-2 shadow-xs transition-all shrink-0">
+                <i data-lucide="plus-circle" class="w-4 h-4"></i>
+                <span>+ Yeni Eğitim Ekle</span>
+              </button>
+            </div>
+
+            <div id="education-management-list" class="space-y-4">
+              <!-- JS ile doldurulacak -->
+            </div>
+          </div>
+        </section>
+
+        <!-- ================= 4. TAB: DENEYİM & KARİYER ================= -->
+        <section id="tab-experience" class="tab-content hidden space-y-6">
+          <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-xs space-y-5">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-200">
+              <div>
+                <h3 class="text-base font-bold text-[#1E2D3D]">Deneyim, Görevler & Çalışılan Kurumlar</h3>
+                <p class="text-xs text-slate-500 mt-0.5">Araştırma görevliliği, avukatlık büroları, çalıştığınız yayınevleri listesini düzenleyin veya silin.</p>
+              </div>
+              <button onclick="openExperienceModalForNew()" class="px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold flex items-center gap-2 shadow-xs transition-all shrink-0">
+                <i data-lucide="plus-circle" class="w-4 h-4"></i>
+                <span>+ Yeni Görev / Deneyim Ekle</span>
+              </button>
+            </div>
+
+            <div id="experience-management-list" class="space-y-4">
+              <!-- JS ile doldurulacak -->
+            </div>
+          </div>
+        </section>
+
+        <!-- ================= 5. TAB: DİLLER & BECERİLER ================= -->
+        <section id="tab-languages" class="tab-content hidden space-y-6">
+          <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-xs space-y-5">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-200">
+              <div>
+                <h3 class="text-base font-bold text-[#1E2D3D]">Yabancı Diller & Yetkinlikler</h3>
+                <p class="text-xs text-slate-500 mt-0.5">Arapça, Osmanlı Türkçesi, İngilizce gibi dillerin seviye haplarını (1-5 arası) ayarlayın, yeni dil ekleyin veya silin.</p>
+              </div>
+              <button onclick="openLanguageModalForNew()" class="px-4 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold flex items-center gap-2 shadow-xs transition-all shrink-0">
+                <i data-lucide="plus-circle" class="w-4 h-4"></i>
+                <span>+ Yeni Dil Ekle</span>
+              </button>
+            </div>
+
+            <div id="languages-management-list" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <!-- JS ile doldurulacak -->
+            </div>
+          </div>
+        </section>
+
+        <!-- ================= 6. TAB: BELGELER & SERTİFİKALAR ================= -->
+        <section id="tab-certificates" class="tab-content hidden space-y-6">
+          <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-xs space-y-5">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-200">
+              <div>
+                <h3 class="text-base font-bold text-[#1E2D3D]">Resmi Belgeler & Sertifikalar</h3>
+                <p class="text-xs text-slate-500 mt-0.5">Yeminli Tercüman Tutanağı ve diğer resmi belgelerinizi düzenleyin veya silin.</p>
+              </div>
+              <button onclick="openCertificateModalForNew()" class="px-4 py-2.5 rounded-xl bg-amber-600 hover:bg-amber-700 text-white text-xs font-bold flex items-center gap-2 shadow-xs transition-all shrink-0">
+                <i data-lucide="plus-circle" class="w-4 h-4"></i>
+                <span>+ Yeni Belge Ekle</span>
+              </button>
+            </div>
+
+            <div id="certificates-management-list" class="space-y-4">
+              <!-- JS ile doldurulacak -->
+            </div>
+          </div>
+        </section>
+
+        <!-- ================= 7. TAB: BİYOGRAFİ & İLETİŞİM ================= -->
+        <section id="tab-profile" class="tab-content hidden space-y-6">
+          <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-xs space-y-6">
+            <div>
+              <h3 class="text-base font-bold text-[#1E2D3D]">Biyografi, Unvan & İletişim Bilgileri</h3>
+              <p class="text-xs text-slate-500 mt-0.5">Sitenin sol sütunundaki sabit bilgiler, telefon, mailler, sosyal profiller ve detaylı biyografi metnini düzenleyin.</p>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-xs font-bold text-slate-600 mb-1">İsim Soyisim</label>
+                <input type="text" id="prof-name" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs focus:ring-2 focus:ring-[#1E2D3D]">
+              </div>
+
+              <div>
+                <label class="block text-xs font-bold text-slate-600 mb-1">Unvan</label>
+                <input type="text" id="prof-title" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs focus:ring-2 focus:ring-[#1E2D3D]">
+              </div>
+
+              <div>
+                <label class="block text-xs font-bold text-slate-600 mb-1">Kurum / Fakülte</label>
+                <input type="text" id="prof-institution" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs focus:ring-2 focus:ring-[#1E2D3D]">
+              </div>
+
+              <div>
+                <label class="block text-xs font-bold text-slate-600 mb-1">Ana Bilim Dalı</label>
+                <input type="text" id="prof-department" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs focus:ring-2 focus:ring-[#1E2D3D]">
+              </div>
+
+              <div>
+                <label class="block text-xs font-bold text-slate-600 mb-1">Dahili No</label>
+                <input type="text" id="prof-phoneInternal" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs focus:ring-2 focus:ring-[#1E2D3D]">
+              </div>
+
+              <div>
+                <label class="block text-xs font-bold text-slate-600 mb-1">Santral / Tam Tel</label>
+                <input type="text" id="prof-phoneFull" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs focus:ring-2 focus:ring-[#1E2D3D]">
+              </div>
+
+              <div>
+                <label class="block text-xs font-bold text-slate-600 mb-1">Birincil E-posta (Gmail)</label>
+                <input type="email" id="prof-emailPrimary" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs focus:ring-2 focus:ring-[#1E2D3D]">
+              </div>
+
+              <div>
+                <label class="block text-xs font-bold text-slate-600 mb-1">Kurumsal E-posta (.edu.tr)</label>
+                <input type="email" id="prof-emailAcademic" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs focus:ring-2 focus:ring-[#1E2D3D]">
+              </div>
+
+              <div class="sm:col-span-2">
+                <label class="block text-xs font-bold text-slate-600 mb-1">Fakülte Adresi</label>
+                <input type="text" id="prof-address" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs focus:ring-2 focus:ring-[#1E2D3D]">
+              </div>
+
+              <div>
+                <label class="block text-xs font-bold text-slate-600 mb-1">LinkedIn Profil Linki</label>
+                <input type="url" id="prof-linkedin" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs focus:ring-2 focus:ring-[#1E2D3D]">
+              </div>
+
+              <div>
+                <label class="block text-xs font-bold text-slate-600 mb-1">X (Twitter) Profil Linki</label>
+                <input type="url" id="prof-twitter" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs focus:ring-2 focus:ring-[#1E2D3D]">
+              </div>
+
+              <div class="sm:col-span-2">
+                <label class="block text-xs font-bold text-slate-600 mb-1">Kitapyurdu Yazar Sayfası Linki</label>
+                <input type="url" id="prof-kitapyurdu" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs focus:ring-2 focus:ring-[#1E2D3D]">
+              </div>
+
+              <div class="sm:col-span-2">
+                <label class="block text-xs font-bold text-slate-600 mb-1">Hakkında / Biyografi (Paragraflar arası çift Enter bırakabilirsiniz)</label>
+                <textarea id="prof-bio" rows="6" class="w-full p-3.5 rounded-xl border border-slate-200 text-xs focus:ring-2 focus:ring-[#1E2D3D] leading-relaxed"></textarea>
+              </div>
+            </div>
+
+            <div class="flex justify-end pt-4 border-t border-slate-200">
+              <button onclick="saveProfileFromInputs()" class="px-6 py-2.5 rounded-xl bg-[#1E2D3D] hover:bg-slate-800 text-white font-bold text-xs shadow-xs transition-all flex items-center gap-2">
+                <i data-lucide="check" class="w-4 h-4"></i>
+                <span>Profil Bilgilerini Güncelle & Kaydet</span>
+              </button>
+            </div>
+          </div>
+        </section>
+
+        <!-- ================= 8. TAB: SAYFA & MENÜ YÖNETİMİ ================= -->
+        <section id="tab-pages" class="tab-content hidden space-y-6">
+          <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-xs">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-200">
+              <div>
+                <h3 class="text-base font-bold text-[#1E2D3D]">Site Sayfaları & Üst Sekmeler</h3>
+                <p class="text-xs text-slate-500 mt-0.5">Sitenin en üstündeki sayfa çubuğunda görünecek sayfaları açın/kapatın, sıralayın veya yeni sayfa ekleyin.</p>
+              </div>
+              <button onclick="openNewPageModal()" class="px-4 py-2.5 rounded-xl bg-[#1E2D3D] hover:bg-slate-800 text-white text-xs font-bold flex items-center gap-2 shadow-xs transition-all shrink-0">
+                <i data-lucide="plus-circle" class="w-4 h-4"></i>
+                <span>+ Yeni Sayfa Ekle</span>
+              </button>
+            </div>
+
+            <div id="pages-management-list" class="divide-y divide-slate-100 mt-4">
+              <!-- JS ile doldurulacak -->
+            </div>
+          </div>
+        </section>
+
+        <!-- ================= 9. TAB: MAKALELER & PDF ================= -->
+        <section id="tab-articles" class="tab-content hidden space-y-6">
+          <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-xs space-y-5">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-200">
+              <div>
+                <h3 class="text-base font-bold text-[#1E2D3D]">Akademik Makaleler & Tebliğler</h3>
+                <p class="text-xs text-slate-500 mt-0.5">Hakemli dergilerdeki makalelerinizi, sempozyum bildirilerinizi ve PDF linklerini yönetin.</p>
+              </div>
+              <button onclick="openNewArticleModal()" class="px-4 py-2.5 rounded-xl bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-bold flex items-center gap-2 shadow-xs transition-all shrink-0">
+                <i data-lucide="plus-circle" class="w-4 h-4"></i>
+                <span>+ Yeni Makale Ekle</span>
+              </button>
+            </div>
+
+            <div id="articles-management-list" class="space-y-3">
+              <!-- JS ile doldurulacak -->
+            </div>
+          </div>
+        </section>
+
+        <!-- ================= 10. TAB: SES & VİDEO ARŞİVİ ================= -->
+        <section id="tab-media" class="tab-content hidden space-y-6">
+          <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-xs space-y-5">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-200">
+              <div>
+                <h3 class="text-base font-bold text-[#1E2D3D]">Dersler, Sohbetler & Medya Kayıtları</h3>
+                <p class="text-xs text-slate-500 mt-0.5">Ses kayıtları (MP3 dersler, podcastler) ve video söyleşileri ekleyip yönetin.</p>
+              </div>
+              <button onclick="openNewMediaModal()" class="px-4 py-2.5 rounded-xl bg-purple-700 hover:bg-purple-800 text-white text-xs font-bold flex items-center gap-2 shadow-xs transition-all shrink-0">
+                <i data-lucide="plus-circle" class="w-4 h-4"></i>
+                <span>+ Yeni Medya Ekle</span>
+              </button>
+            </div>
+
+            <div id="media-management-list" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <!-- JS ile doldurulacak -->
+            </div>
+          </div>
+        </section>
+
+        <!-- ================= 11. TAB: YAZILAR & NOTLAR ================= -->
+        <section id="tab-blog" class="tab-content hidden space-y-6">
+          <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-xs space-y-5">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-200">
+              <div>
+                <h3 class="text-base font-bold text-[#1E2D3D]">İlmi Notlar, Yazılar & Blog</h3>
+                <p class="text-xs text-slate-500 mt-0.5">Tercüme usûlü, fıkıh tahlilleri ve akademik düşünce yazılarınızı yönetin.</p>
+              </div>
+              <button onclick="openNewBlogModal()" class="px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-900 text-white text-xs font-bold flex items-center gap-2 shadow-xs transition-all shrink-0">
+                <i data-lucide="plus-circle" class="w-4 h-4"></i>
+                <span>+ Yeni Yazı Ekle</span>
+              </button>
+            </div>
+
+            <div id="blog-management-list" class="space-y-4">
+              <!-- JS ile doldurulacak -->
+            </div>
+          </div>
+        </section>
+
+        <!-- ================= 12. TAB: FORUM & İLİM MECLİSİ ================= -->
+        <section id="tab-forum" class="tab-content hidden space-y-6">
+          <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-xs space-y-5">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-200">
+              <div>
+                <h3 class="text-base font-bold text-[#1E2D3D]">Forum & İlim Meclisi (Müzakere Alanı)</h3>
+                <p class="text-xs text-slate-500 mt-0.5">Ziyaretçilerle ve ilim talebeleriyle fikir teatisi yapabileceğiniz tartışma başlıkları.</p>
+              </div>
+              <button onclick="openNewForumModal()" class="px-4 py-2.5 rounded-xl bg-blue-700 hover:bg-blue-800 text-white text-xs font-bold flex items-center gap-2 shadow-xs transition-all shrink-0">
+                <i data-lucide="plus-circle" class="w-4 h-4"></i>
+                <span>+ Yeni Konu Aç</span>
+              </button>
+            </div>
+
+            <div id="forum-management-list" class="space-y-3">
+              <!-- JS ile doldurulacak -->
+            </div>
+          </div>
+        </section>
+
+        <!-- ================= 13. TAB: CANLI SİTE ÖNİZLEME (IFRAME) ================= -->
+        <section id="tab-preview" class="tab-content hidden space-y-4">
+          <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-xs flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <span class="text-xs font-bold text-slate-700">Cihaz Görünümü:</span>
+              <button onclick="setIframeDevice('100%')" class="px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold flex items-center gap-1.5">
+                <i data-lucide="monitor" class="w-3.5 h-3.5"></i>
+                <span>Masaüstü</span>
+              </button>
+              <button onclick="setIframeDevice('768px')" class="px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold flex items-center gap-1.5">
+                <i data-lucide="tablet" class="w-3.5 h-3.5"></i>
+                <span>Tablet</span>
+              </button>
+              <button onclick="setIframeDevice('390px')" class="px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold flex items-center gap-1.5">
+                <i data-lucide="smartphone" class="w-3.5 h-3.5"></i>
+                <span>Mobil</span>
+              </button>
+            </div>
+
+            <div class="flex items-center gap-2">
+              <button onclick="reloadPreviewIframe()" class="px-3 py-1.5 rounded-lg bg-[#1E2D3D] text-white text-xs font-bold flex items-center gap-1.5 hover:bg-slate-800 transition-all">
+                <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i>
+                <span>Önizlemeyi Yenile</span>
+              </button>
+              <a href="index.html" target="_blank" class="px-3 py-1.5 rounded-lg border border-slate-200 text-slate-700 text-xs font-bold flex items-center gap-1.5 hover:bg-slate-100 transition-all">
+                <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+                <span>Tam Ekranda Aç</span>
+              </a>
+            </div>
+          </div>
+
+          <div class="bg-slate-800 rounded-3xl p-4 flex justify-center shadow-inner overflow-hidden min-h-[750px]">
+            <iframe id="preview-iframe" src="index.html" class="bg-white rounded-2xl shadow-2xl transition-all duration-300 w-full h-[750px] border-0"></iframe>
+          </div>
+        </section>
+
+        <!-- ================= 14. TAB: YEDEKLEME & İHRACAT ================= -->
+        <section id="tab-backup" class="tab-content hidden space-y-6">
+          <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-xs space-y-6">
+            <div>
+              <h3 class="text-base font-bold text-[#1E2D3D]">Veri Güvenliği, Yedekleme & Dosya İhracı</h3>
+              <p class="text-xs text-slate-500 mt-0.5">Yaptığınız tüm değişiklikleri tek tıkla güvenceye alın veya projenize kalıcı olarak aktarın.</p>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+              
+              <!-- data.js İndirme Kartı -->
+              <div class="p-5 rounded-2xl border border-emerald-200 bg-emerald-50/50 space-y-3 flex flex-col justify-between">
+                <div>
+                  <div class="flex items-center gap-2 text-emerald-800 font-bold text-sm">
+                    <i data-lucide="file-code" class="w-5 h-5"></i>
+                    <span>assets/js/data.js Olarak İndir</span>
+                  </div>
+                  <p class="text-xs text-emerald-700/90 mt-1 leading-relaxed">
+                    Paneldeki en güncel hali doğrudan sitenin ana veri dosyası olan <code class="font-bold">data.js</code> formatında indirir. İndirilen dosyayı projedeki <code class="font-bold">assets/js/</code> klasörüne kopyalayarak kalıcı hale getirebilirsiniz.
+                  </p>
+                </div>
+                <button onclick="exportDataJs()" class="w-full py-2.5 rounded-xl bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-xs flex items-center justify-center gap-2 shadow-xs transition-all">
+                  <i data-lucide="download" class="w-4 h-4"></i>
+                  <span>data.js Dosyasını İndir</span>
+                </button>
+              </div>
+
+              <!-- JSON Tam Yedek Kartı -->
+              <div class="p-5 rounded-2xl border border-blue-200 bg-blue-50/50 space-y-3 flex flex-col justify-between">
+                <div>
+                  <div class="flex items-center gap-2 text-blue-800 font-bold text-sm">
+                    <i data-lucide="database" class="w-5 h-5"></i>
+                    <span>JSON Formatında Tam Yedek Al</span>
+                  </div>
+                  <p class="text-xs text-blue-700/90 mt-1 leading-relaxed">
+                    Tüm kitaplarınızı, makalelerinizi, ses ve video kayıtlarınızı tarih etiketli bir <code class="font-bold">.json</code> yedeği olarak indirir. Bilgisayar değiştirdiğinizde veya geri dönmek istediğinizde kullanabilirsiniz.
+                  </p>
+                </div>
+                <button onclick="exportJsonBackup()" class="w-full py-2.5 rounded-xl bg-blue-700 hover:bg-blue-800 text-white font-bold text-xs flex items-center justify-center gap-2 shadow-xs transition-all">
+                  <i data-lucide="archive" class="w-4 h-4"></i>
+                  <span>JSON Yedeği İndir</span>
+                </button>
+              </div>
+
+              <!-- Yedeği Geri Yükle -->
+              <div class="p-5 rounded-2xl border border-slate-200 bg-slate-50 space-y-3">
+                <div class="flex items-center gap-2 text-slate-800 font-bold text-sm">
+                  <i data-lucide="upload" class="w-5 h-5"></i>
+                  <span>Yedekten Geri Yükle</span>
+                </div>
+                <p class="text-xs text-slate-600 leading-relaxed">
+                  Daha önce aldığınız bir JSON yedeğini yükleyerek tüm verileri tek tıkla geri getirin.
+                </p>
+                <input type="file" id="import-json-file" accept=".json" onchange="importJsonBackup(event)" class="text-xs text-slate-500 file:mr-3 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-[#1E2D3D] file:text-white hover:file:bg-slate-800 cursor-pointer">
+              </div>
+
+              <!-- Fabrika Ayarlarına Dön -->
+              <div class="p-5 rounded-2xl border border-rose-200 bg-rose-50/50 space-y-3">
+                <div class="flex items-center gap-2 text-rose-800 font-bold text-sm">
+                  <i data-lucide="alert-triangle" class="w-5 h-5"></i>
+                  <span>Orijinal data.js'e Sıfırla</span>
+                </div>
+                <p class="text-xs text-rose-700/90 leading-relaxed">
+                  LocalStorage belleğindeki düzenlemeleri temizleyerek projenin diskteki orijinal <code class="font-bold">data.js</code> haline geri döner.
+                </p>
+                <button onclick="resetToDefaultData()" class="w-full py-2.5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs flex items-center justify-center gap-2 shadow-xs transition-all">
+                  <i data-lucide="trash-2" class="w-4 h-4"></i>
+                  <span>Belleği Sıfırla & Varsayılana Dön</span>
+                </button>
+              </div>
+
+            </div>
+          </div>
+        </section>
+
+        <!-- ================= 15. TAB: ŞİFRE & AYARLAR ================= -->
+        <section id="tab-settings" class="tab-content hidden space-y-6">
+          <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-xs max-w-xl space-y-5">
+            <div>
+              <h3 class="text-base font-bold text-[#1E2D3D]">Güvenlik & Panel Şifresi</h3>
+              <p class="text-xs text-slate-500 mt-0.5">Yönetim stüdyosuna giriş şifrenizi güncelleyin.</p>
+            </div>
+
+            <div class="space-y-3">
+              <div>
+                <label class="block text-xs font-bold text-slate-600 mb-1">Mevcut Şifre</label>
+                <input type="password" id="cur-pass-input" placeholder="Mevcut şifreniz..." class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs focus:ring-2 focus:ring-[#1E2D3D]">
+              </div>
+
+              <div>
+                <label class="block text-xs font-bold text-slate-600 mb-1">Yeni Şifre</label>
+                <input type="password" id="new-pass-input" placeholder="Yeni belirleyeceğiniz şifre..." class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs focus:ring-2 focus:ring-[#1E2D3D]">
+              </div>
+            </div>
+
+            <button onclick="changeAdminPassword()" class="px-5 py-2.5 rounded-xl bg-[#1E2D3D] hover:bg-slate-800 text-white text-xs font-bold flex items-center gap-2 shadow-xs transition-all">
+              <i data-lucide="key" class="w-4 h-4"></i>
+              <span>Şifreyi Değiştir</span>
+            </button>
+            <p class="text-[11px] text-slate-400 mt-2">İlk kullanım için varsayılan şifreniz: <code class="font-bold text-slate-700 bg-slate-100 px-1 py-0.5 rounded">1234</code>'tür. Güvenliğiniz için dilediğiniz zaman buradan yeni bir şifre belirleyebilirsiniz.</p>
+          </div>
+        </section>
+
+      </main>
+
+    </div>
+
+  </div>
+
+  <!-- ================= MODAL 1: KİTAP EKLE / DÜZENLE ================= -->
+  <div id="book-edit-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-slate-950/70 backdrop-blur-xs p-4 overflow-y-auto">
+    <div class="relative w-full max-w-2xl rounded-3xl bg-white border border-slate-200 shadow-2xl p-6 sm:p-8 my-8 space-y-5">
+      <div class="flex items-center justify-between pb-4 border-b border-slate-100">
+        <h3 id="book-modal-title" class="text-base sm:text-lg font-bold text-[#1E2D3D]">Eser Ekle / Düzenle</h3>
+        <button onclick="closeBookEditModal()" class="p-2 text-slate-400 hover:text-slate-600 rounded-full hover:bg-slate-100">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <input type="hidden" id="edit-book-id">
+      <input type="hidden" id="edit-book-section">
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
+        <div>
+          <label class="block font-bold text-slate-600 mb-1">Eser Kategorisi / Türü</label>
+          <select id="edit-book-type" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 font-semibold">
+            <option value="translations-published">Tercüme (Yayımlanan)</option>
+            <option value="translations-prep">Tercüme (Hazırlık Aşamasında)</option>
+            <option value="editions">Edisyon & Neşir</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block font-bold text-slate-600 mb-1">Eser Adı (Türkçe)</label>
+          <input type="text" id="edit-book-turkishTitle" placeholder="Örn: Dört Mezhep Fıkhının Özü" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 font-bold">
+        </div>
+
+        <div>
+          <label class="block font-bold text-slate-600 mb-1">Orijinal Başlık (Arapça / Osmanlıca)</label>
+          <input type="text" id="edit-book-originalTitle" placeholder="Örn: Zübdetü'l-Ahkâm..." class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200">
+        </div>
+
+        <div>
+          <label class="block font-bold text-slate-600 mb-1">Müellif / Yazar</label>
+          <input type="text" id="edit-book-author" placeholder="Örn: Sirâcüddîn el-Hindî" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200">
+        </div>
+
+        <div>
+          <label class="block font-bold text-slate-600 mb-1">Yayınevi</label>
+          <input type="text" id="edit-book-publisher" placeholder="Örn: Kitâbî Yayınları" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200">
+        </div>
+
+        <div>
+          <label class="block font-bold text-slate-600 mb-1">Yayın Yılı</label>
+          <input type="text" id="edit-book-year" placeholder="Örn: 2024" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200">
+        </div>
+
+        <div>
+          <label class="block font-bold text-slate-600 mb-1">Sayfa Sayısı</label>
+          <input type="text" id="edit-book-pages" placeholder="Örn: 240 Sayfa" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200">
+        </div>
+
+        <div>
+          <label class="block font-bold text-slate-600 mb-1">ISBN</label>
+          <input type="text" id="edit-book-isbn" placeholder="Örn: 9786259981802" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200">
+        </div>
+
+        <div class="sm:col-span-2">
+          <label class="block font-bold text-slate-600 mb-1">Kitapyurdu Satın Alma / İnceleme Linki</label>
+          <input type="url" id="edit-book-kitapyurduUrl" placeholder="https://www.kitapyurdu.com/kitap/..." class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200">
+        </div>
+
+        <div class="sm:col-span-2">
+          <label class="block font-bold text-slate-600 mb-1">Kapak Görseli Dosya Yolu (Klasör: assets/images/covers/)</label>
+          <input type="text" id="edit-book-coverImage" placeholder="assets/images/covers/ornek-kitap.jpg" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200">
+          <p class="text-[11px] text-slate-400 mt-1">Görselinizi masaüstündeki <code class="bg-slate-100 px-1 py-0.5 rounded text-slate-800">assets/images/covers/</code> içine atıp dosya yolunu buraya yazınız.</p>
+        </div>
+
+        <div class="sm:col-span-2">
+          <label class="block font-bold text-slate-600 mb-1">Eser Hakkında / Tanıtım Yazısı (İki yana yaslı metin)</label>
+          <textarea id="edit-book-description" rows="5" placeholder="Kitabın tanıtım ve arka kapak metnini buraya yapıştırınız..." class="w-full p-3.5 rounded-xl border border-slate-200 leading-relaxed"></textarea>
+        </div>
+      </div>
+
+      <div class="flex items-center justify-end gap-3 pt-4 border-t border-slate-100">
+        <button onclick="closeBookEditModal()" class="px-4 py-2.5 rounded-xl border border-slate-200 hover:bg-slate-100 text-slate-700 text-xs font-semibold">İptal</button>
+        <button onclick="saveBookFromModal()" class="px-6 py-2.5 rounded-xl bg-orange-600 hover:bg-orange-700 text-white font-bold text-xs shadow-xs">Eseri Kaydet</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= MODAL 2: EĞİTİM EKLE / DÜZENLE ================= -->
+  <div id="edu-edit-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-slate-950/70 backdrop-blur-xs p-4 overflow-y-auto">
+    <div class="relative w-full max-w-lg rounded-3xl bg-white border border-slate-200 shadow-2xl p-6 sm:p-8 my-8 space-y-5 text-xs">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+        <h3 id="edu-modal-title" class="text-base font-bold text-[#1E2D3D]">Eğitim Ekle / Düzenle</h3>
+        <button onclick="closeEducationModal()" class="p-2 text-slate-400 hover:text-slate-600 rounded-full hover:bg-slate-100">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <input type="hidden" id="edit-edu-level-index">
+      <input type="hidden" id="edit-edu-item-index">
+
+      <div class="space-y-3.5">
+        <div>
+          <label class="block font-bold text-slate-600 mb-1">Eğitim Seviyesi / Başlık</label>
+          <input type="text" id="edit-edu-level" placeholder="Örn: Lisans / Yüksek Lisans veya Klasik İlimler" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 font-bold">
+        </div>
+
+        <div>
+          <label class="block font-bold text-slate-600 mb-1">Tarih Aralığı (Varsa)</label>
+          <input type="text" id="edit-edu-period" placeholder="Örn: (2014–Halen)" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200">
+        </div>
+
+        <div>
+          <label class="block font-bold text-slate-600 mb-1">Üniversite / Kurum Adı</label>
+          <input type="text" id="edit-edu-institution" placeholder="Örn: Ankara Yıldırım Beyazıt Üniversitesi" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200">
+        </div>
+
+        <div>
+          <label class="block font-bold text-slate-600 mb-1">Fakülte / Bölüm</label>
+          <input type="text" id="edit-edu-faculty" placeholder="Örn: Hukuk Fakültesi (2018–2023)" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200">
+        </div>
+
+        <div>
+          <label class="block font-bold text-slate-600 mb-1">Ek Not (örn: %30 İngilizce, Yüksek Lisans)</label>
+          <input type="text" id="edit-edu-note" placeholder="Örn: %30 İngilizce" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200">
+        </div>
+
+        <div>
+          <label class="block font-bold text-slate-600 mb-1">Kurum Resmi Web Sitesi URL</label>
+          <input type="url" id="edit-edu-url" placeholder="https://..." class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200">
+        </div>
+      </div>
+
+      <div class="flex items-center justify-end gap-3 pt-3 border-t border-slate-100">
+        <button onclick="closeEducationModal()" class="px-4 py-2.5 rounded-xl border border-slate-200 hover:bg-slate-100 text-slate-700 font-semibold">İptal</button>
+        <button onclick="saveEducationFromModal()" class="px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold shadow-xs">Eğitimi Kaydet</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= MODAL 3: DENEYİM EKLE / DÜZENLE ================= -->
+  <div id="exp-edit-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-slate-950/70 backdrop-blur-xs p-4 overflow-y-auto">
+    <div class="relative w-full max-w-lg rounded-3xl bg-white border border-slate-200 shadow-2xl p-6 sm:p-8 my-8 space-y-5 text-xs">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+        <h3 id="exp-modal-title" class="text-base font-bold text-[#1E2D3D]">Deneyim & Görev Ekle / Düzenle</h3>
+        <button onclick="closeExperienceModal()" class="p-2 text-slate-400 hover:text-slate-600 rounded-full hover:bg-slate-100">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <input type="hidden" id="edit-exp-index">
+
+      <div class="space-y-3.5">
+        <div>
+          <label class="block font-bold text-slate-600 mb-1">Görev / Unvan</label>
+          <input type="text" id="edit-exp-title" placeholder="Örn: Araştırma Görevlisi veya Mütercim-Editör" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 font-bold">
+        </div>
+
+        <div>
+          <label class="block font-bold text-slate-600 mb-1">Tarih Aralığı</label>
+          <input type="text" id="edit-exp-period" placeholder="Örn: 2025 – HALEN" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 font-bold text-blue-700">
+        </div>
+
+        <div>
+          <label class="block font-bold text-slate-600 mb-1">Kurum / Üniversite (Varsa)</label>
+          <input type="text" id="edit-exp-institution" placeholder="Örn: Bolu Abant İzzet Baysal Üniversitesi" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200">
+        </div>
+
+        <div>
+          <label class="block font-bold text-slate-600 mb-1">Fakülte & Bölüm / Açıklama</label>
+          <input type="text" id="edit-exp-department" placeholder="Örn: Hukuk Fakültesi - İslam Hukuku Ana Bilim Dalı" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200">
+        </div>
+
+        <div>
+          <label class="block font-bold text-slate-600 mb-1">Alt Maddeler / Yayınevleri / Bürolar (Her satıra bir madde yazınız)</label>
+          <textarea id="edit-exp-subitems-raw" rows="4" placeholder="Ketebe Yayınları / alBaraka Yayınları / İnsan Yayınları...&#10;Hukuki Blog Yazarı" class="w-full p-3 rounded-xl border border-slate-200 leading-relaxed"></textarea>
+          <p class="text-[11px] text-slate-400 mt-1">Avukatlık ortaklıkları veya yayınevleri gibi alt maddeleri satır satır girebilirsiniz.</p>
+        </div>
+      </div>
+
+      <div class="flex items-center justify-end gap-3 pt-3 border-t border-slate-100">
+        <button onclick="closeExperienceModal()" class="px-4 py-2.5 rounded-xl border border-slate-200 hover:bg-slate-100 text-slate-700 font-semibold">İptal</button>
+        <button onclick="saveExperienceFromModal()" class="px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold shadow-xs">Deneyimi Kaydet</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= MODAL 4: YENİ SAYFA EKLE ================= -->
+  <div id="page-edit-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-slate-950/70 backdrop-blur-xs p-4 overflow-y-auto">
+    <div class="relative w-full max-w-md rounded-3xl bg-white border border-slate-200 shadow-2xl p-6 sm:p-8 my-8 space-y-5 text-xs">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+        <h3 class="text-base font-bold text-[#1E2D3D]">Yeni Sayfa / Sekme Ekle</h3>
+        <button onclick="closePageEditModal()" class="p-2 text-slate-400 hover:text-slate-600 rounded-full hover:bg-slate-100">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <div class="space-y-4">
+        <div>
+          <label class="block font-bold text-slate-600 mb-1">Sayfa Başlığı</label>
+          <input type="text" id="new-page-title" placeholder="Örn: Dersler & Seminerler" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200">
+        </div>
+
+        <div>
+          <label class="block font-bold text-slate-600 mb-1">Sayfa Türü</label>
+          <select id="new-page-type" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 font-semibold">
+            <option value="articles">Makaleler & PDF Paylaşımı</option>
+            <option value="media">Ses & Video Arşivi</option>
+            <option value="blog">Yazılar & Blog Notları</option>
+            <option value="forum">Forum & Müzakere</option>
+            <option value="custom">Özel Serbest Metin / Sayfa</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block font-bold text-slate-600 mb-1">İkon Seçimi</label>
+          <select id="new-page-icon" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 font-semibold">
+            <option value="file-text">Dosya / Makale (file-text)</option>
+            <option value="headphones">Kulaklık / Ses (headphones)</option>
+            <option value="video">Kamera / Video (video)</option>
+            <option value="pen-tool">Kalem / Blog (pen-tool)</option>
+            <option value="messages-square">Mesaj / Forum (messages-square)</option>
+            <option value="image">Resim / Galeri (image)</option>
+            <option value="star">Yıldız (star)</option>
+            <option value="bookmark">Kitap Ayracı (bookmark)</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="flex items-center justify-end gap-3 pt-3 border-t border-slate-100">
+        <button onclick="closePageEditModal()" class="px-4 py-2.5 rounded-xl border border-slate-200 hover:bg-slate-100 text-slate-700 font-semibold">İptal</button>
+        <button onclick="saveNewPageFromModal()" class="px-5 py-2.5 rounded-xl bg-[#1E2D3D] hover:bg-slate-800 text-white font-bold shadow-xs">Sayfayı Oluştur</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bildirim Mesajı (Toast) -->
+  <div id="toast-msg" class="fixed bottom-6 right-6 z-50 hidden bg-[#1E2D3D] text-white px-5 py-3.5 rounded-2xl shadow-2xl border border-white/20 text-xs font-bold items-center gap-2.5 transform transition-all">
+    <i data-lucide="check-circle" class="w-4 h-4 text-emerald-400"></i>
+    <span id="toast-text">İşlem başarıyla tamamlandı!</span>
+  </div>
+
+  <!-- Scriptler: Önce data.js, sonra admin stüdyosu mantığı -->
+  <script src="assets/js/data.js?v=2.2"></script>
+  <script>
+    /* ================= AMIL SALIH PORTFOLYO YÖNETİM STÜDYOSU 2.0 ================= */
+    
+    let appData = {};
+    let booksViewMode = 'table'; // 'table' veya 'grid'
+
+    function getSourceData() {
+      if (typeof window !== 'undefined' && window.portfolioData && window.portfolioData.profile && window.portfolioData.profile.name) {
+        return window.portfolioData;
+      }
+      if (typeof portfolioData !== 'undefined' && portfolioData.profile && portfolioData.profile.name) {
+        return portfolioData;
+      }
+      return {};
+    }
+
+    function initAppData() {
+      const source = getSourceData();
+      try {
+        const saved = localStorage.getItem('amil_salih_portfolio_data');
+        if (saved) {
+          const parsed = JSON.parse(saved);
+          // Gerçekten dolu ve geçerli bir portfolyo verisi mi kontrol et (önceki boş nesne hatasını bertaraf et)
+          const hasBooks = (parsed.translations && parsed.translations.published && parsed.translations.published.length > 0) ||
+                           (parsed.editions && parsed.editions.length > 0);
+          const hasProfile = parsed.profile && parsed.profile.name;
+
+          if (hasBooks && hasProfile) {
+            appData = parsed;
+          } else {
+            console.warn('LocalStorage belleğindeki veri boş tespit edildi. data.js dosyasından yükleniyor...');
+            appData = JSON.parse(JSON.stringify(source));
+            localStorage.setItem('amil_salih_portfolio_data', JSON.stringify(appData));
+          }
+        } else {
+          appData = JSON.parse(JSON.stringify(source));
+          localStorage.setItem('amil_salih_portfolio_data', JSON.stringify(appData));
+        }
+      } catch (e) {
+        console.error('Veri yükleme hatası:', e);
+        appData = JSON.parse(JSON.stringify(source));
+      }
+
+      // Eksik olabilecek tüm modülleri data.js kaynağından eksiksiz tamamla
+      if (!appData.profile || !appData.profile.name) appData.profile = JSON.parse(JSON.stringify(source.profile || {}));
+      if (!appData.education || appData.education.length === 0) appData.education = JSON.parse(JSON.stringify(source.education || []));
+      if (!appData.experience || appData.experience.length === 0) appData.experience = JSON.parse(JSON.stringify(source.experience || []));
+      if (!appData.languages || appData.languages.length === 0) appData.languages = JSON.parse(JSON.stringify(source.languages || []));
+      if (!appData.skills || appData.skills.length === 0) appData.skills = JSON.parse(JSON.stringify(source.skills || []));
+      if (!appData.certificates || appData.certificates.length === 0) appData.certificates = JSON.parse(JSON.stringify(source.certificates || []));
+      if (!appData.translations || !appData.translations.published || appData.translations.published.length === 0) {
+        appData.translations = JSON.parse(JSON.stringify(source.translations || { published: [], inPreparation: [] }));
+      }
+      if (!appData.editions || appData.editions.length === 0) appData.editions = JSON.parse(JSON.stringify(source.editions || []));
+      if (!appData.pages || appData.pages.length === 0) appData.pages = JSON.parse(JSON.stringify(source.pages || []));
+      if (!appData.articles) appData.articles = JSON.parse(JSON.stringify(source.articles || []));
+      if (!appData.media) appData.media = JSON.parse(JSON.stringify(source.media || []));
+      if (!appData.blog) appData.blog = JSON.parse(JSON.stringify(source.blog || []));
+      if (!appData.forumTopics) appData.forumTopics = JSON.parse(JSON.stringify(source.forumTopics || []));
+    }
+
+    // data.js Dosyasından Yeniden Yükle / Senkronize Et
+    function syncFromDataJs() {
+      const source = getSourceData();
+      if (confirm('DİKKAT: Projenin orijinal data.js dosyasındaki veriler (39 kitap, eğitim ve kariyer geçmişi) yeniden çekilecek ve panel sıfırlanacaktır. Devam edilsin mi?')) {
+        appData = JSON.parse(JSON.stringify(source));
+        saveAllChanges(true);
+        renderAllSections();
+        showToast('data.js dosyasından tüm veriler anlık olarak çekildi!');
+      }
+    }
+
+    // Parola Doğrulama
+    function handleLogin() {
+      const input = document.getElementById('admin-pass-input');
+      const pass = input.value.trim();
+      const storedPass = localStorage.getItem('amil_salih_admin_password') || '1234';
+
+      if (pass === storedPass) {
+        sessionStorage.setItem('amil_salih_logged_in', 'true');
+        document.getElementById('login-screen').classList.add('hidden');
+        document.getElementById('admin-app').classList.remove('hidden');
+        renderAllSections();
+        if (window.lucide) lucide.createIcons();
+      } else {
+        alert('Hatalı parola! Lütfen tekrar deneyiniz.');
+      }
+    }
+
+    function handleLogout() {
+      sessionStorage.removeItem('amil_salih_logged_in');
+      window.location.reload();
+    }
+
+    function togglePasswordVisibility() {
+      const input = document.getElementById('admin-pass-input');
+      input.type = input.type === 'password' ? 'text' : 'password';
+    }
+
+    // Sekme Değiştirme
+    function switchTab(tabId) {
+      document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+      document.querySelectorAll('.admin-nav-btn').forEach(btn => {
+        btn.classList.remove('bg-[#1E2D3D]', 'text-white');
+        btn.classList.add('text-slate-700', 'hover:bg-slate-100');
+      });
+
+      const targetSection = document.getElementById('tab-' + tabId);
+      if (targetSection) targetSection.classList.remove('hidden');
+
+      const targetBtn = document.querySelector(`.admin-nav-btn[data-tab="${tabId}"]`);
+      if (targetBtn) {
+        targetBtn.classList.add('bg-[#1E2D3D]', 'text-white');
+        targetBtn.classList.remove('text-slate-700', 'hover:bg-slate-100');
+      }
+
+      // Çizim fonksiyonları
+      if (tabId === 'dashboard') renderDashboard();
+      if (tabId === 'books') renderBooksManagement();
+      if (tabId === 'education') renderEducationManagement();
+      if (tabId === 'experience') renderExperienceManagement();
+      if (tabId === 'languages') renderLanguagesManagement();
+      if (tabId === 'certificates') renderCertificatesManagement();
+      if (tabId === 'profile') populateProfileInputs();
+      if (tabId === 'pages') renderPagesManagement();
+      if (tabId === 'articles') renderArticlesManagement();
+      if (tabId === 'media') renderMediaManagement();
+      if (tabId === 'blog') renderBlogManagement();
+      if (tabId === 'forum') renderForumManagement();
+      if (tabId === 'preview') reloadPreviewIframe();
+
+      if (window.lucide) lucide.createIcons();
+    }
+
+    function renderAllSections() {
+      renderDashboard();
+      renderBooksManagement();
+      renderEducationManagement();
+      renderExperienceManagement();
+      renderLanguagesManagement();
+      renderCertificatesManagement();
+      populateProfileInputs();
+      renderPagesManagement();
+      renderArticlesManagement();
+      renderMediaManagement();
+      renderBlogManagement();
+      renderForumManagement();
+    }
+
+    // Toast Bildirim Durum Makinesi (Zamanlayıcı Çakışmalarını Önler)
+    let toastTimeoutId = null;
+    function showToast(message = 'İşlem başarıyla tamamlandı!') {
+      const toast = document.getElementById('toast-msg');
+      const text = document.getElementById('toast-text');
+      if (!toast || !text) return;
+
+      if (toastTimeoutId) {
+        clearTimeout(toastTimeoutId);
+        toastTimeoutId = null;
+      }
+
+      text.textContent = message;
+      toast.classList.remove('hidden');
+      toast.classList.add('flex');
+
+      toastTimeoutId = setTimeout(() => {
+        toast.classList.add('hidden');
+        toast.classList.remove('flex');
+        toastTimeoutId = null;
+      }, 3500);
+    }
+
+    // Admin Modal Durum Makinesi
+    const AdminModalManager = {
+      activeModalId: null,
+
+      open(id) {
+        if (this.activeModalId && this.activeModalId !== id) {
+          this.close(this.activeModalId);
+        }
+        const el = document.getElementById(id);
+        if (!el) return;
+
+        this.activeModalId = id;
+        el.classList.remove('hidden');
+        el.classList.add('flex');
+        document.body.style.overflow = 'hidden';
+        if (window.lucide) lucide.createIcons();
+      },
+
+      close(id) {
+        const targetId = id || this.activeModalId;
+        if (!targetId) return;
+
+        const el = document.getElementById(targetId);
+        if (el) {
+          el.classList.add('hidden');
+          el.classList.remove('flex');
+        }
+        if (this.activeModalId === targetId) {
+          this.activeModalId = null;
+          document.body.style.overflow = '';
+        }
+      },
+
+      closeCurrent() {
+        if (this.activeModalId) {
+          this.close(this.activeModalId);
+        }
+      }
+    };
+
+    // Canlı Kaydetme (LocalStorage)
+    function saveAllChanges(notify = false) {
+      try {
+        localStorage.setItem('amil_salih_portfolio_data', JSON.stringify(appData));
+        if (notify) showToast('Tüm değişiklikler anında kaydedildi ve siteye uygulandı!');
+      } catch (e) {
+        alert('Kaydetme hatası: ' + e.message);
+      }
+    }
+
+    // Dashboard Çizimi
+    function renderDashboard() {
+      const transPub = (appData.translations && appData.translations.published) ? appData.translations.published.length : 0;
+      const transPrep = (appData.translations && appData.translations.inPreparation) ? appData.translations.inPreparation.length : 0;
+      const editions = appData.editions ? appData.editions.length : 0;
+      const totalBooks = transPub + transPrep + editions;
+
+      const eduCount = (appData.education || []).reduce((acc, cur) => acc + (cur.items ? cur.items.length : 1), 0);
+      const expCount = (appData.experience || []).length;
+      const langCount = (appData.languages || []).length;
+      const certCount = (appData.certificates || []).length;
+
+      document.getElementById('stat-books-count').textContent = totalBooks;
+      document.getElementById('stat-edu-exp-count').textContent = eduCount + expCount;
+      document.getElementById('stat-lang-cert-count').textContent = langCount + certCount;
+      document.getElementById('stat-pages-count').textContent = (appData.pages || []).filter(p => p.active === true).length;
+      document.getElementById('books-badge-count').textContent = totalBooks + ' Eser';
+    }
+
+    /* ================= 2. KİTAPLAR YÖNETİMİ (39 ESER) ================= */
+    function renderBooksManagement() {
+      filterBooksList();
+    }
+
+    function setBooksView(mode) {
+      booksViewMode = mode;
+      const tBtn = document.getElementById('btn-view-table');
+      const gBtn = document.getElementById('btn-view-grid');
+      const tWrap = document.getElementById('books-table-wrapper');
+      const gWrap = document.getElementById('books-grid-wrapper');
+
+      if (mode === 'table') {
+        tWrap.classList.remove('hidden');
+        gWrap.classList.add('hidden');
+        tBtn.classList.add('bg-white', 'shadow-xs', 'text-slate-800');
+        tBtn.classList.remove('text-slate-500');
+        gBtn.classList.remove('bg-white', 'shadow-xs', 'text-slate-800');
+        gBtn.classList.add('text-slate-500');
+      } else {
+        tWrap.classList.add('hidden');
+        gWrap.classList.remove('hidden');
+        gBtn.classList.add('bg-white', 'shadow-xs', 'text-slate-800');
+        gBtn.classList.remove('text-slate-500');
+        tBtn.classList.remove('bg-white', 'shadow-xs', 'text-slate-800');
+        tBtn.classList.add('text-slate-500');
+      }
+      filterBooksList();
+    }
+
+    function filterBooksList() {
+      const q = (document.getElementById('books-search-input')?.value || '').toLowerCase();
+      const cat = document.getElementById('books-category-filter')?.value || 'all';
+      const tbody = document.getElementById('books-management-tbody');
+      const gWrap = document.getElementById('books-grid-wrapper');
+      if (!tbody) return;
+
+      let allBooks = [];
+
+      if (cat === 'all' || cat === 'translations-published') {
+        (appData.translations?.published || []).forEach(b => {
+          allBooks.push({ ...b, _sec: 'translations-published', _typeLabel: 'Tercüme (Yayımlanan)' });
+        });
+      }
+
+      if (cat === 'all' || cat === 'translations-prep') {
+        (appData.translations?.inPreparation || []).forEach(b => {
+          allBooks.push({ ...b, _sec: 'translations-prep', _typeLabel: 'Tercüme (Hazırlık)' });
+        });
+      }
+
+      if (cat === 'all' || cat === 'editions') {
+        (appData.editions || []).forEach(b => {
+          allBooks.push({ ...b, _sec: 'editions', _typeLabel: 'Edisyon' });
+        });
+      }
+
+      if (q) {
+        allBooks = allBooks.filter(b => 
+          (b.turkishTitle || b.title || '').toLowerCase().includes(q) ||
+          (b.originalTitle || '').toLowerCase().includes(q) ||
+          (b.author || '').toLowerCase().includes(q) ||
+          (b.publisher || '').toLowerCase().includes(q) ||
+          (b.kunye?.isbn || '').toLowerCase().includes(q)
+        );
+      }
+
+      // Tablo Doldurma
+      tbody.innerHTML = allBooks.map(b => {
+        const coverSrc = b.coverImage || 'assets/images/profile.jpg';
+        const displayTitle = b.turkishTitle || b.title;
+        return `
+          <tr class="hover:bg-slate-50 transition-colors">
+            <td class="p-3">
+              <div class="w-10 h-14 rounded overflow-hidden border border-slate-200 bg-slate-100 shadow-xs shrink-0 flex items-center justify-center">
+                <img src="${coverSrc}" class="max-w-full max-h-full object-contain" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2240%22 height=%2256%22><rect width=%22100%%22 height=%22100%%22 fill=%22%23e2e8f0%22/></svg>'">
+              </div>
+            </td>
+            <td class="p-3">
+              <div class="font-bold text-slate-800">${displayTitle}</div>
+              <div class="text-[11px] text-slate-500">${b.author || '-'}</div>
+              ${b.originalTitle ? `<div class="text-[10px] text-slate-400 italic">${b.originalTitle}</div>` : ''}
+            </td>
+            <td class="p-3">
+              <span class="px-2 py-0.5 rounded-full text-[10px] font-semibold ${b._sec.includes('editions') ? 'bg-indigo-100 text-indigo-700' : (b._sec.includes('prep') ? 'bg-amber-100 text-amber-700' : 'bg-emerald-100 text-emerald-700')}">
+                ${b._typeLabel}
+              </span>
+            </td>
+            <td class="p-3 text-slate-600">
+              <div class="font-medium">${b.publisher || '-'}</div>
+              <div class="text-[10px] text-slate-400">${b.year || '-'} &bull; ${b.role || ''}</div>
+            </td>
+            <td class="p-3 text-slate-500 text-[11px]">
+              <div>${b.kunye?.sayfaSayisi || '-'}</div>
+              <div class="font-mono text-[10px] text-slate-400">ISBN: ${b.kunye?.isbn || '-'}</div>
+            </td>
+            <td class="p-3 text-right whitespace-nowrap">
+              <button onclick="editBook('${b.id}', '${b._sec}')" class="p-1.5 rounded-lg text-slate-500 hover:text-blue-600 hover:bg-blue-50" title="Düzenle">
+                <i data-lucide="edit-3" class="w-4 h-4"></i>
+              </button>
+              <button onclick="duplicateBook('${b.id}', '${b._sec}')" class="p-1.5 rounded-lg text-slate-500 hover:text-emerald-600 hover:bg-emerald-50" title="Çoğalt / Kopyala">
+                <i data-lucide="copy" class="w-4 h-4"></i>
+              </button>
+              <button onclick="deleteBook('${b.id}', '${b._sec}')" class="p-1.5 rounded-lg text-slate-500 hover:text-rose-600 hover:bg-rose-50" title="Sil">
+                <i data-lucide="trash-2" class="w-4 h-4"></i>
+              </button>
+            </td>
+          </tr>
+        `;
+      }).join('');
+
+      // Grid Doldurma
+      if (gWrap) {
+        gWrap.innerHTML = allBooks.map(b => {
+          const coverSrc = b.coverImage || 'assets/images/profile.jpg';
+          const displayTitle = b.turkishTitle || b.title;
+          return `
+            <div class="p-3 rounded-2xl bg-white border border-slate-200 shadow-xs hover:shadow-md transition-all flex flex-col justify-between group">
+              <div class="aspect-[1/1.4] rounded-xl overflow-hidden bg-slate-50 border border-slate-200 mb-2.5 relative flex items-center justify-center p-1">
+                <img src="${coverSrc}" class="max-w-full max-h-full object-contain group-hover:scale-105 transition-transform">
+                <span class="absolute top-2 left-2 px-2 py-0.5 rounded-md bg-black/70 backdrop-blur-xs text-white text-[9px] font-bold">
+                  ${b.year || '-'}
+                </span>
+              </div>
+              <div>
+                <h4 class="font-bold text-xs text-[#1E2D3D] line-clamp-2 leading-tight">${displayTitle}</h4>
+                <div class="text-[10px] text-slate-500 truncate mt-0.5">${b.author || '-'}</div>
+                <div class="text-[10px] text-slate-400 truncate">${b.publisher || '-'}</div>
+              </div>
+              <div class="flex items-center justify-between pt-2.5 mt-2 border-t border-slate-100">
+                <span class="text-[9px] px-1.5 py-0.5 rounded bg-slate-100 text-slate-600 font-semibold">${b._typeLabel.split(' ')[0]}</span>
+                <div class="flex items-center gap-1">
+                  <button onclick="editBook('${b.id}', '${b._sec}')" class="p-1 rounded text-slate-500 hover:text-blue-600"><i data-lucide="edit-3" class="w-3.5 h-3.5"></i></button>
+                  <button onclick="deleteBook('${b.id}', '${b._sec}')" class="p-1 rounded text-slate-500 hover:text-rose-600"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i></button>
+                </div>
+              </div>
+            </div>
+          `;
+        }).join('');
+      }
+
+      if (window.lucide) lucide.createIcons();
+    }
+
+    function openBookModalForNew() {
+      document.getElementById('book-modal-title').textContent = 'Yeni Eser Ekle';
+      document.getElementById('edit-book-id').value = '';
+      document.getElementById('edit-book-section').value = 'translations-published';
+      document.getElementById('edit-book-turkishTitle').value = '';
+      document.getElementById('edit-book-originalTitle').value = '';
+      document.getElementById('edit-book-author').value = '';
+      document.getElementById('edit-book-publisher').value = '';
+      document.getElementById('edit-book-year').value = '';
+      document.getElementById('edit-book-pages').value = '';
+      document.getElementById('edit-book-isbn').value = '';
+      document.getElementById('edit-book-kitapyurduUrl').value = '';
+      document.getElementById('edit-book-coverImage').value = '';
+      document.getElementById('edit-book-description').value = '';
+
+      AdminModalManager.open('book-edit-modal');
+      if (window.lucide) lucide.createIcons();
+    }
+
+    function closeBookEditModal() {
+      AdminModalManager.close('book-edit-modal');
+    }
+
+    function editBook(id, sec) {
+      let b = null;
+      if (sec === 'translations-published') b = appData.translations.published.find(x => x.id === id);
+      else if (sec === 'translations-prep') b = appData.translations.inPreparation.find(x => x.id === id);
+      else if (sec === 'editions') b = appData.editions.find(x => x.id === id);
+
+      if (!b) return;
+
+      document.getElementById('book-modal-title').textContent = 'Eseri Düzenle: ' + (b.turkishTitle || b.title);
+      document.getElementById('edit-book-id').value = b.id;
+      document.getElementById('edit-book-section').value = sec;
+      document.getElementById('edit-book-type').value = sec;
+      document.getElementById('edit-book-turkishTitle').value = b.turkishTitle || b.title || '';
+      document.getElementById('edit-book-originalTitle').value = b.originalTitle || '';
+      document.getElementById('edit-book-author').value = b.author || '';
+      document.getElementById('edit-book-publisher').value = b.publisher || '';
+      document.getElementById('edit-book-year').value = b.year || '';
+      document.getElementById('edit-book-pages').value = b.kunye?.sayfaSayisi || '';
+      document.getElementById('edit-book-isbn').value = b.kunye?.isbn || '';
+      document.getElementById('edit-book-kitapyurduUrl').value = b.kitapyurduUrl || '';
+      document.getElementById('edit-book-coverImage').value = b.coverImage || '';
+      document.getElementById('edit-book-description').value = b.description || '';
+
+      AdminModalManager.open('book-edit-modal');
+      if (window.lucide) lucide.createIcons();
+    }
+
+    function duplicateBook(id, sec) {
+      let b = null;
+      if (sec === 'translations-published') b = appData.translations.published.find(x => x.id === id);
+      else if (sec === 'translations-prep') b = appData.translations.inPreparation.find(x => x.id === id);
+      else if (sec === 'editions') b = appData.editions.find(x => x.id === id);
+
+      if (!b) return;
+
+      const copy = JSON.parse(JSON.stringify(b));
+      copy.id = 'b-' + Date.now();
+      copy.turkishTitle = (copy.turkishTitle || copy.title) + ' (Kopya)';
+      copy.title = copy.turkishTitle;
+
+      if (sec === 'translations-published') appData.translations.published.unshift(copy);
+      else if (sec === 'translations-prep') appData.translations.inPreparation.unshift(copy);
+      else if (sec === 'editions') appData.editions.unshift(copy);
+
+      saveAllChanges(true);
+      filterBooksList();
+      renderDashboard();
+    }
+
+    function saveBookFromModal() {
+      const id = document.getElementById('edit-book-id').value;
+      const targetSec = document.getElementById('edit-book-type').value;
+      const oldSec = document.getElementById('edit-book-section').value;
+
+      const title = document.getElementById('edit-book-turkishTitle').value.trim();
+      if (!title) {
+        alert('Lütfen eser adını giriniz!');
+        return;
+      }
+
+      const bookObj = {
+        id: id || ('b-' + Date.now()),
+        turkishTitle: title,
+        title: title,
+        originalTitle: document.getElementById('edit-book-originalTitle').value.trim(),
+        author: document.getElementById('edit-book-author').value.trim(),
+        publisher: document.getElementById('edit-book-publisher').value.trim(),
+        year: document.getElementById('edit-book-year').value.trim(),
+        coverImage: document.getElementById('edit-book-coverImage').value.trim() || null,
+        kitapyurduUrl: document.getElementById('edit-book-kitapyurduUrl').value.trim(),
+        description: document.getElementById('edit-book-description').value.trim(),
+        kunye: {
+          yayinTarihi: document.getElementById('edit-book-year').value.trim() || '-',
+          isbn: document.getElementById('edit-book-isbn').value.trim() || '-',
+          sayfaSayisi: document.getElementById('edit-book-pages').value.trim() || '-'
+        }
+      };
+
+      if (id && oldSec) {
+        if (oldSec === 'translations-published') appData.translations.published = appData.translations.published.filter(x => x.id !== id);
+        else if (oldSec === 'translations-prep') appData.translations.inPreparation = appData.translations.inPreparation.filter(x => x.id !== id);
+        else if (oldSec === 'editions') appData.editions = appData.editions.filter(x => x.id !== id);
+      }
+
+      if (targetSec === 'translations-published') {
+        if (!appData.translations.published) appData.translations.published = [];
+        appData.translations.published.unshift(bookObj);
+      } else if (targetSec === 'translations-prep') {
+        if (!appData.translations.inPreparation) appData.translations.inPreparation = [];
+        appData.translations.inPreparation.unshift(bookObj);
+      } else if (targetSec === 'editions') {
+        if (!appData.editions) appData.editions = [];
+        appData.editions.unshift(bookObj);
+      }
+
+      saveAllChanges(true);
+      closeBookEditModal();
+      filterBooksList();
+      renderDashboard();
+    }
+
+    function deleteBook(id, sec) {
+      if (confirm('Bu eseri silmek istediğinize emin misiniz?')) {
+        if (sec === 'translations-published') appData.translations.published = appData.translations.published.filter(x => x.id !== id);
+        else if (sec === 'translations-prep') appData.translations.inPreparation = appData.translations.inPreparation.filter(x => x.id !== id);
+        else if (sec === 'editions') appData.editions = appData.editions.filter(x => x.id !== id);
+
+        saveAllChanges(true);
+        filterBooksList();
+        renderDashboard();
+      }
+    }
+
+    /* ================= 3. EĞİTİM GEÇMİŞİ YÖNETİMİ ================= */
+    function renderEducationManagement() {
+      const container = document.getElementById('education-management-list');
+      if (!container) return;
+
+      const edus = appData.education || [];
+      if (edus.length === 0) {
+        container.innerHTML = '<div class="p-6 text-center text-slate-400 text-xs">Kayıtlı eğitim bulunmuyor.</div>';
+        return;
+      }
+
+      container.innerHTML = edus.map((sec, lIdx) => `
+        <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-3">
+          <div class="flex items-center justify-between pb-2 border-b border-slate-200">
+            <div class="font-bold text-sm text-[#1E2D3D] flex items-center gap-2">
+              <span class="w-2.5 h-2.5 rounded-full bg-blue-600"></span>
+              <span>${sec.level}</span>
+              ${sec.period ? `<span class="text-xs text-slate-500 font-normal">${sec.period}</span>` : ''}
+            </div>
+            <div class="flex items-center gap-1.5">
+              <button onclick="editEducationSection(${lIdx})" class="px-2.5 py-1 rounded-lg bg-white border border-slate-200 text-slate-700 hover:text-blue-600 text-xs font-semibold">Başlığı Düzenle</button>
+              <button onclick="deleteEducationSection(${lIdx})" class="p-1.5 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50" title="Bölümü Sil"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+            </div>
+          </div>
+
+          ${sec.items && sec.items.length > 0 ? `
+            <div class="space-y-2">
+              ${sec.items.map((it, itIdx) => `
+                <div class="p-3 rounded-xl bg-white border border-slate-200/80 flex items-center justify-between gap-3 shadow-xs">
+                  <div>
+                    <div class="font-bold text-xs sm:text-sm text-slate-800">${it.institution}</div>
+                    <div class="text-xs text-slate-500">${it.faculty || ''} ${it.note ? `<span class="italic text-slate-400">(${it.note})</span>` : ''}</div>
+                    ${it.url ? `<a href="${it.url}" target="_blank" class="text-[10px] text-blue-600 hover:underline inline-flex items-center gap-1 mt-0.5">${it.url}</a>` : ''}
+                  </div>
+                  <div class="flex items-center gap-1 shrink-0">
+                    <button onclick="editEducationItem(${lIdx}, ${itIdx})" class="p-1.5 rounded-lg text-slate-500 hover:text-blue-600"><i data-lucide="edit-3" class="w-4 h-4"></i></button>
+                    <button onclick="deleteEducationItem(${lIdx}, ${itIdx})" class="p-1.5 rounded-lg text-slate-500 hover:text-rose-600"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+                  </div>
+                </div>
+              `).join('')}
+            </div>
+          ` : `
+            <div class="text-xs text-slate-400 italic">Bu kategori altında alt kurum bulunmuyor (Doğrudan başlık olarak gösterilir).</div>
+          `}
+        </div>
+      `).join('');
+
+      if (window.lucide) lucide.createIcons();
+    }
+
+    function openEducationModalForNew() {
+      document.getElementById('edu-modal-title').textContent = 'Yeni Eğitim Seviyesi / Kurum Ekle';
+      document.getElementById('edit-edu-level-index').value = '-1';
+      document.getElementById('edit-edu-item-index').value = '-1';
+      document.getElementById('edit-edu-level').value = '';
+      document.getElementById('edit-edu-period').value = '';
+      document.getElementById('edit-edu-institution').value = '';
+      document.getElementById('edit-edu-faculty').value = '';
+      document.getElementById('edit-edu-note').value = '';
+      document.getElementById('edit-edu-url').value = '';
+
+      AdminModalManager.open('edu-edit-modal');
+      if (window.lucide) lucide.createIcons();
+    }
+
+    function editEducationSection(lIdx) {
+      const sec = appData.education[lIdx];
+      if (!sec) return;
+      document.getElementById('edu-modal-title').textContent = 'Eğitim Seviyesini Düzenle: ' + sec.level;
+      document.getElementById('edit-edu-level-index').value = lIdx;
+      document.getElementById('edit-edu-item-index').value = '-1';
+      document.getElementById('edit-edu-level').value = sec.level || '';
+      document.getElementById('edit-edu-period').value = sec.period || '';
+      document.getElementById('edit-edu-institution').value = '';
+      document.getElementById('edit-edu-faculty').value = '';
+      document.getElementById('edit-edu-note').value = '';
+      document.getElementById('edit-edu-url').value = '';
+
+      AdminModalManager.open('edu-edit-modal');
+      if (window.lucide) lucide.createIcons();
+    }
+
+    function editEducationItem(lIdx, itIdx) {
+      const sec = appData.education[lIdx];
+      const it = sec?.items[itIdx];
+      if (!it) return;
+
+      document.getElementById('edu-modal-title').textContent = 'Okulu / Kurumu Düzenle: ' + it.institution;
+      document.getElementById('edit-edu-level-index').value = lIdx;
+      document.getElementById('edit-edu-item-index').value = itIdx;
+      document.getElementById('edit-edu-level').value = sec.level || '';
+      document.getElementById('edit-edu-period').value = sec.period || '';
+      document.getElementById('edit-edu-institution').value = it.institution || '';
+      document.getElementById('edit-edu-faculty').value = it.faculty || '';
+      document.getElementById('edit-edu-note').value = it.note || '';
+      document.getElementById('edit-edu-url').value = it.url || '';
+
+      AdminModalManager.open('edu-edit-modal');
+      if (window.lucide) lucide.createIcons();
+    }
+
+    function closeEducationModal() {
+      AdminModalManager.close('edu-edit-modal');
+    }
+
+    function saveEducationFromModal() {
+      const lIdx = parseInt(document.getElementById('edit-edu-level-index').value);
+      const itIdx = parseInt(document.getElementById('edit-edu-item-index').value);
+
+      const level = document.getElementById('edit-edu-level').value.trim();
+      const period = document.getElementById('edit-edu-period').value.trim();
+      const institution = document.getElementById('edit-edu-institution').value.trim();
+      const faculty = document.getElementById('edit-edu-faculty').value.trim();
+      const note = document.getElementById('edit-edu-note').value.trim();
+      const url = document.getElementById('edit-edu-url').value.trim();
+
+      if (!level && !institution) {
+        alert('Lütfen en az bir seviye adı veya kurum adı giriniz!');
+        return;
+      }
+
+      if (lIdx === -1) {
+        // Yeni Seviye Ekle
+        const newSec = {
+          level: level || institution,
+          period: period,
+          items: institution ? [{ institution, faculty, note, url }] : []
+        };
+        appData.education.push(newSec);
+      } else if (itIdx === -1) {
+        // Seviye Başlığını Güncelle
+        appData.education[lIdx].level = level;
+        appData.education[lIdx].period = period;
+        if (institution) {
+          if (!appData.education[lIdx].items) appData.education[lIdx].items = [];
+          appData.education[lIdx].items.push({ institution, faculty, note, url });
+        }
+      } else {
+        // Belirli Kurumu Güncelle
+        appData.education[lIdx].items[itIdx] = { institution, faculty, note, url };
+      }
+
+      saveAllChanges(true);
+      closeEducationModal();
+      renderEducationManagement();
+      renderDashboard();
+    }
+
+    function deleteEducationSection(lIdx) {
+      if (confirm('Bu eğitim bölümünü ve altındaki kurumları silmek istediğinize emin misiniz?')) {
+        appData.education.splice(lIdx, 1);
+        saveAllChanges(true);
+        renderEducationManagement();
+        renderDashboard();
+      }
+    }
+
+    function deleteEducationItem(lIdx, itIdx) {
+      if (confirm('Bu okulu silmek istediğinize emin misiniz?')) {
+        appData.education[lIdx].items.splice(itIdx, 1);
+        saveAllChanges(true);
+        renderEducationManagement();
+        renderDashboard();
+      }
+    }
+
+    /* ================= 4. DENEYİM & KARİYER YÖNETİMİ ================= */
+    function renderExperienceManagement() {
+      const container = document.getElementById('experience-management-list');
+      if (!container) return;
+
+      const exps = appData.experience || [];
+      if (exps.length === 0) {
+        container.innerHTML = '<div class="p-6 text-center text-slate-400 text-xs">Kayıtlı deneyim bulunmuyor.</div>';
+        return;
+      }
+
+      container.innerHTML = exps.map((exp, idx) => `
+        <div class="p-4 rounded-2xl bg-white border border-slate-200 shadow-xs flex flex-col justify-between space-y-3">
+          <div class="flex items-start justify-between gap-3">
+            <div>
+              <div class="font-bold text-sm sm:text-base text-[#1E2D3D]">${exp.title}</div>
+              <div class="text-xs font-bold text-emerald-700 mt-0.5">${exp.period}</div>
+              ${exp.institution ? `<div class="text-xs text-slate-700 font-semibold mt-1">• ${exp.institution} <span class="text-slate-500 font-normal">(${exp.department || ''})</span></div>` : ''}
+            </div>
+            <div class="flex items-center gap-1 shrink-0">
+              <button onclick="editExperience(${idx})" class="p-1.5 rounded-lg text-slate-500 hover:text-blue-600"><i data-lucide="edit-3" class="w-4 h-4"></i></button>
+              <button onclick="deleteExperience(${idx})" class="p-1.5 rounded-lg text-slate-500 hover:text-rose-600"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+            </div>
+          </div>
+
+          ${exp.subItems && exp.subItems.length > 0 ? `
+            <div class="pt-2 border-t border-slate-100 space-y-1">
+              ${exp.subItems.map(s => `
+                <div class="text-xs text-slate-600 flex items-start gap-1">
+                  <span class="text-slate-400">•</span>
+                  <span><strong>${s.name}</strong> ${s.role ? `<span class="text-slate-400">(${s.role})</span>` : ''}</span>
+                </div>
+              `).join('')}
+            </div>
+          ` : ''}
+        </div>
+      `).join('');
+
+      if (window.lucide) lucide.createIcons();
+    }
+
+    function openExperienceModalForNew() {
+      document.getElementById('exp-modal-title').textContent = 'Yeni Görev / Deneyim Ekle';
+      document.getElementById('edit-exp-index').value = '-1';
+      document.getElementById('edit-exp-title').value = '';
+      document.getElementById('edit-exp-period').value = '';
+      document.getElementById('edit-exp-institution').value = '';
+      document.getElementById('edit-exp-department').value = '';
+      document.getElementById('edit-exp-subitems-raw').value = '';
+
+      AdminModalManager.open('exp-edit-modal');
+      if (window.lucide) lucide.createIcons();
+    }
+
+    function editExperience(idx) {
+      const exp = appData.experience[idx];
+      if (!exp) return;
+
+      document.getElementById('exp-modal-title').textContent = 'Deneyimi Düzenle: ' + exp.title;
+      document.getElementById('edit-exp-index').value = idx;
+      document.getElementById('edit-exp-title').value = exp.title || '';
+      document.getElementById('edit-exp-period').value = exp.period || '';
+      document.getElementById('edit-exp-institution').value = exp.institution || '';
+      document.getElementById('edit-exp-department').value = exp.department || '';
+
+      const rawSub = (exp.subItems || []).map(s => s.role ? `${s.name} (${s.role})` : s.name).join('\n');
+      document.getElementById('edit-exp-subitems-raw').value = rawSub;
+
+      AdminModalManager.open('exp-edit-modal');
+      if (window.lucide) lucide.createIcons();
+    }
+
+    function closeExperienceModal() {
+      AdminModalManager.close('exp-edit-modal');
+    }
+
+    function saveExperienceFromModal() {
+      const idx = parseInt(document.getElementById('edit-exp-index').value);
+      const title = document.getElementById('edit-exp-title').value.trim();
+      const period = document.getElementById('edit-exp-period').value.trim();
+      const institution = document.getElementById('edit-exp-institution').value.trim();
+      const department = document.getElementById('edit-exp-department').value.trim();
+      const rawSub = document.getElementById('edit-exp-subitems-raw').value.trim();
+
+      if (!title) {
+        alert('Lütfen bir unvan/görev giriniz!');
+        return;
+      }
+
+      const subItems = rawSub ? rawSub.split('\n').filter(Boolean).map(line => {
+        const match = line.match(/^(.*?)\s*\((.*?)\)$/);
+        if (match) {
+          return { name: match[1].trim(), role: match[2].trim() };
+        }
+        return { name: line.trim() };
+      }) : undefined;
+
+      const expObj = {
+        title,
+        period,
+        institution: institution || undefined,
+        department: department || undefined,
+        subItems
+      };
+
+      if (idx === -1) {
+        appData.experience.unshift(expObj);
+      } else {
+        appData.experience[idx] = expObj;
+      }
+
+      saveAllChanges(true);
+      closeExperienceModal();
+      renderExperienceManagement();
+      renderDashboard();
+    }
+
+    function deleteExperience(idx) {
+      if (confirm('Bu deneyim kaydını silmek istediğinize emin misiniz?')) {
+        appData.experience.splice(idx, 1);
+        saveAllChanges(true);
+        renderExperienceManagement();
+        renderDashboard();
+      }
+    }
+
+    /* ================= 5. DİLLER & BECERİLER ================= */
+    function renderLanguagesManagement() {
+      const container = document.getElementById('languages-management-list');
+      if (!container) return;
+
+      const langs = appData.languages || [];
+      container.innerHTML = langs.map((l, idx) => `
+        <div class="p-4 rounded-xl bg-white border border-slate-200 shadow-xs flex items-center justify-between">
+          <div>
+            <div class="font-bold text-sm text-[#1E2D3D]">${l.name}</div>
+            <div class="text-xs text-slate-500 mt-1 flex items-center gap-1">
+              <span>Seviye: <strong>${l.level} / 5</strong></span>
+              <span class="text-amber-500 font-bold ml-1">${'★'.repeat(l.level)}${'☆'.repeat(5 - l.level)}</span>
+            </div>
+          </div>
+          <div class="flex items-center gap-1">
+            <button onclick="editLanguagePrompt(${idx})" class="p-1.5 rounded-lg text-slate-500 hover:text-blue-600"><i data-lucide="edit-3" class="w-4 h-4"></i></button>
+            <button onclick="deleteLanguage(${idx})" class="p-1.5 rounded-lg text-slate-500 hover:text-rose-600"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+          </div>
+        </div>
+      `).join('');
+
+      if (window.lucide) lucide.createIcons();
+    }
+
+    function openLanguageModalForNew() {
+      const name = prompt('Dil Adı (örn: Farsça, Fransızca):');
+      if (!name) return;
+      const lvl = prompt('Seviye (1 ile 5 arası rakam):', '5');
+      const num = parseInt(lvl) || 5;
+
+      appData.languages.push({ name, level: Math.min(5, Math.max(1, num)) });
+      saveAllChanges(true);
+      renderLanguagesManagement();
+      renderDashboard();
+    }
+
+    function editLanguagePrompt(idx) {
+      const l = appData.languages[idx];
+      const name = prompt('Dil Adı:', l.name);
+      if (!name) return;
+      const lvl = prompt('Seviye (1 ile 5 arası):', l.level);
+      const num = parseInt(lvl) || l.level;
+
+      appData.languages[idx] = { name, level: Math.min(5, Math.max(1, num)) };
+      saveAllChanges(true);
+      renderLanguagesManagement();
+    }
+
+    function deleteLanguage(idx) {
+      if (confirm('Bu dili silmek istediğinize emin misiniz?')) {
+        appData.languages.splice(idx, 1);
+        saveAllChanges(true);
+        renderLanguagesManagement();
+        renderDashboard();
+      }
+    }
+
+    /* ================= 6. SERTİFİKALAR YÖNETİMİ ================= */
+    function renderCertificatesManagement() {
+      const container = document.getElementById('certificates-management-list');
+      if (!container) return;
+
+      const certs = appData.certificates || [];
+      container.innerHTML = certs.map((c, idx) => `
+        <div class="p-4 rounded-xl bg-white border border-slate-200 shadow-xs flex items-center justify-between">
+          <div>
+            <div class="font-bold text-sm text-[#1E2D3D]">${c.title}</div>
+            <div class="text-xs text-slate-500">${c.subtitle || ''} &bull; ${c.issuer || ''}</div>
+            <p class="text-xs text-slate-600 mt-1 leading-relaxed">${c.details || ''}</p>
+          </div>
+          <div class="flex items-center gap-1 shrink-0 ml-3">
+            <button onclick="editCertificatePrompt(${idx})" class="p-1.5 rounded-lg text-slate-500 hover:text-blue-600"><i data-lucide="edit-3" class="w-4 h-4"></i></button>
+            <button onclick="deleteCertificate(${idx})" class="p-1.5 rounded-lg text-slate-500 hover:text-rose-600"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+          </div>
+        </div>
+      `).join('');
+
+      if (window.lucide) lucide.createIcons();
+    }
+
+    function openCertificateModalForNew() {
+      const title = prompt('Belge / Sertifika Başlığı:');
+      if (!title) return;
+      const subtitle = prompt('Alt Başlık / Yetki Alanı:');
+      const issuer = prompt('Veren Kurum (örn: T.C. Noterliği):');
+      const details = prompt('Açıklama / Detay Metni:');
+
+      appData.certificates.push({
+        id: 'cert-' + Date.now(),
+        title,
+        subtitle: subtitle || '',
+        issuer: issuer || '',
+        date: 'Resmi Belge',
+        status: 'Aktif',
+        details: details || ''
+      });
+      saveAllChanges(true);
+      renderCertificatesManagement();
+      renderDashboard();
+    }
+
+    function editCertificatePrompt(idx) {
+      const c = appData.certificates[idx];
+      const title = prompt('Belge Başlığı:', c.title);
+      if (!title) return;
+      const details = prompt('Detay Açıklama:', c.details);
+
+      appData.certificates[idx].title = title;
+      appData.certificates[idx].details = details || c.details;
+      saveAllChanges(true);
+      renderCertificatesManagement();
+    }
+
+    function deleteCertificate(idx) {
+      if (confirm('Bu belgeyi silmek istediğinize emin misiniz?')) {
+        appData.certificates.splice(idx, 1);
+        saveAllChanges(true);
+        renderCertificatesManagement();
+        renderDashboard();
+      }
+    }
+
+    /* ================= 7. PROFİL BİLGİLERİ ================= */
+    function populateProfileInputs() {
+      const p = appData.profile || {};
+      document.getElementById('prof-name').value = p.name || '';
+      document.getElementById('prof-title').value = p.title || '';
+      document.getElementById('prof-institution').value = p.institution || '';
+      document.getElementById('prof-department').value = p.department || '';
+      document.getElementById('prof-phoneInternal').value = p.phoneInternal || '';
+      document.getElementById('prof-phoneFull').value = p.phoneFull || '';
+      document.getElementById('prof-emailPrimary').value = p.emailPrimary || '';
+      document.getElementById('prof-emailAcademic').value = p.emailAcademic || '';
+      document.getElementById('prof-address').value = p.address || '';
+      document.getElementById('prof-linkedin').value = p.linkedinUrl || '';
+      document.getElementById('prof-twitter').value = p.twitterUrl || '';
+      document.getElementById('prof-kitapyurdu').value = p.kitapyurduProfile || '';
+      document.getElementById('prof-bio').value = p.bio || '';
+    }
+
+    function saveProfileFromInputs() {
+      if (!appData.profile) appData.profile = {};
+      appData.profile.name = document.getElementById('prof-name').value.trim();
+      appData.profile.title = document.getElementById('prof-title').value.trim();
+      appData.profile.institution = document.getElementById('prof-institution').value.trim();
+      appData.profile.department = document.getElementById('prof-department').value.trim();
+      appData.profile.phoneInternal = document.getElementById('prof-phoneInternal').value.trim();
+      appData.profile.phoneFull = document.getElementById('prof-phoneFull').value.trim();
+      appData.profile.emailPrimary = document.getElementById('prof-emailPrimary').value.trim();
+      appData.profile.emailAcademic = document.getElementById('prof-emailAcademic').value.trim();
+      appData.profile.address = document.getElementById('prof-address').value.trim();
+      appData.profile.linkedinUrl = document.getElementById('prof-linkedin').value.trim();
+      appData.profile.twitterUrl = document.getElementById('prof-twitter').value.trim();
+      appData.profile.kitapyurduProfile = document.getElementById('prof-kitapyurdu').value.trim();
+      appData.profile.bio = document.getElementById('prof-bio').value.trim();
+
+      saveAllChanges(true);
+    }
+
+    /* ================= 8. SAYFA YÖNETİMİ ================= */
+    function renderPagesManagement() {
+      const container = document.getElementById('pages-management-list');
+      const pages = appData.pages || [];
+
+      container.innerHTML = pages.map((page, index) => `
+        <div class="py-3 flex items-center justify-between gap-3">
+          <div class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded-lg bg-slate-100 flex items-center justify-center text-slate-700">
+              <i data-lucide="${page.icon || 'file'}" class="w-4 h-4"></i>
+            </div>
+            <div>
+              <div class="font-bold text-xs sm:text-sm text-[#1E2D3D] flex items-center gap-2">
+                <span>${page.title}</span>
+                ${page.removable === false ? '<span class="text-[10px] px-1.5 py-0.5 rounded bg-slate-100 text-slate-500 font-normal">Sabit Sayfa</span>' : ''}
+              </div>
+              <div class="text-[11px] text-slate-400">ID: ${page.id} | Tür: ${page.type || 'genel'}</div>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-2">
+            <button onclick="togglePageActive(${index})" class="px-2.5 py-1 rounded-lg text-xs font-semibold ${page.active === true ? 'bg-emerald-100 text-emerald-800' : 'bg-slate-200 text-slate-600'}">
+              ${page.active === true ? 'Aktif' : 'Gizli'}
+            </button>
+
+            ${page.removable !== false ? `
+              <button onclick="deletePage(${index})" class="p-1.5 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50" title="Sayfayı Sil">
+                <i data-lucide="trash-2" class="w-4 h-4"></i>
+              </button>
+            ` : ''}
+          </div>
+        </div>
+      `).join('');
+
+      if (window.lucide) lucide.createIcons();
+    }
+
+    function togglePageActive(index) {
+      appData.pages[index].active = !(appData.pages[index].active === true);
+      saveAllChanges(true);
+      renderPagesManagement();
+      renderDashboard();
+    }
+
+    function deletePage(index) {
+      if (confirm('Bu sayfayı menüden silmek istediğinize emin misiniz?')) {
+        appData.pages.splice(index, 1);
+        saveAllChanges(true);
+        renderPagesManagement();
+        renderDashboard();
+      }
+    }
+
+    function openNewPageModal() {
+      document.getElementById('new-page-title').value = '';
+      AdminModalManager.open('page-edit-modal');
+      if (window.lucide) lucide.createIcons();
+    }
+
+    function closePageEditModal() {
+      AdminModalManager.close('page-edit-modal');
+    }
+
+    function saveNewPageFromModal() {
+      const title = document.getElementById('new-page-title').value.trim();
+      const type = document.getElementById('new-page-type').value;
+      const icon = document.getElementById('new-page-icon').value;
+
+      if (!title) {
+        alert('Lütfen bir sayfa başlığı giriniz!');
+        return;
+      }
+
+      const newId = 'page-' + Date.now();
+      appData.pages.push({
+        id: newId,
+        title: title,
+        icon: icon,
+        type: type,
+        active: true,
+        order: appData.pages.length + 1,
+        removable: true
+      });
+
+      saveAllChanges(true);
+      closePageEditModal();
+      renderPagesManagement();
+      renderDashboard();
+    }
+
+    /* ================= 9. MAKALELER, MEDYA, BLOG & FORUM ================= */
+    function renderArticlesManagement() {
+      const container = document.getElementById('articles-management-list');
+      if (!container) return;
+      const articles = appData.articles || [];
+
+      if (articles.length === 0) {
+        container.innerHTML = '<div class="p-6 text-center text-slate-400 text-xs">Henüz eklenmiş makale bulunmuyor.</div>';
+        return;
+      }
+
+      container.innerHTML = articles.map((art, idx) => `
+        <div class="p-4 rounded-xl border border-slate-200 bg-white shadow-xs flex items-start justify-between gap-4">
+          <div class="space-y-1">
+            <span class="px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 text-[10px] font-bold">${art.type || 'Makale'}</span>
+            <h4 class="font-bold text-sm text-[#1E2D3D]">${art.title}</h4>
+            <div class="text-xs text-slate-500">${art.journal || ''} (${art.year || ''}) - ${art.pages || ''}</div>
+            <p class="text-xs text-slate-600 line-clamp-2 mt-1">${art.abstract || ''}</p>
+          </div>
+          <div class="flex items-center gap-1.5 shrink-0">
+            <button onclick="deleteArticle(${idx})" class="p-2 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50" title="Sil">
+              <i data-lucide="trash-2" class="w-4 h-4"></i>
+            </button>
+          </div>
+        </div>
+      `).join('');
+
+      if (window.lucide) lucide.createIcons();
+    }
+
+    function openNewArticleModal() {
+      const title = prompt('Makale Başlığı:');
+      if (!title) return;
+      const journal = prompt('Yayınlandığı Dergi / Sempozyum:');
+      const year = prompt('Yıl (Örn: 2025):');
+      const abs = prompt('Özet (Abstract):');
+
+      if (!appData.articles) appData.articles = [];
+      appData.articles.unshift({
+        id: 'art-' + Date.now(),
+        title: title,
+        type: 'Araştırma Makalesi',
+        journal: journal || '',
+        year: year || '2026',
+        pages: 'ss. 1-20',
+        doi: '-',
+        pdfUrl: '',
+        abstract: abs || ''
+      });
+
+      saveAllChanges(true);
+      renderArticlesManagement();
+      renderDashboard();
+    }
+
+    function deleteArticle(idx) {
+      if (confirm('Bu makaleyi silmek istediğinize emin misiniz?')) {
+        appData.articles.splice(idx, 1);
+        saveAllChanges(true);
+        renderArticlesManagement();
+        renderDashboard();
+      }
+    }
+
+    function renderMediaManagement() {
+      const container = document.getElementById('media-management-list');
+      if (!container) return;
+      const mediaList = appData.media || [];
+
+      if (mediaList.length === 0) {
+        container.innerHTML = '<div class="col-span-2 p-6 text-center text-slate-400 text-xs">Henüz medya kaydı eklenmedi.</div>';
+        return;
+      }
+
+      container.innerHTML = mediaList.map((m, idx) => `
+        <div class="p-4 rounded-xl border border-slate-200 bg-white shadow-xs space-y-2 flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between mb-1">
+              <span class="px-2 py-0.5 rounded text-[10px] font-bold ${m.type === 'video' ? 'bg-rose-100 text-rose-700' : 'bg-purple-100 text-purple-700'}">
+                ${m.type === 'video' ? 'Video Kaydı' : 'Ses Kaydı (Ders)'}
+              </span>
+              <span class="text-[11px] text-slate-400 font-semibold">${m.duration || ''}</span>
+            </div>
+            <h4 class="font-bold text-xs sm:text-sm text-[#1E2D3D]">${m.title}</h4>
+            <p class="text-[11px] text-slate-500 line-clamp-2 mt-1">${m.description || ''}</p>
+          </div>
+          <div class="pt-2 border-t border-slate-100 flex items-center justify-between">
+            <span class="text-[10px] text-slate-400">${m.category || ''} (${m.date || ''})</span>
+            <button onclick="deleteMedia(${idx})" class="text-rose-500 hover:text-rose-700 text-xs font-bold">Sil</button>
+          </div>
+        </div>
+      `).join('');
+
+      if (window.lucide) lucide.createIcons();
+    }
+
+    function openNewMediaModal() {
+      const title = prompt('Ders veya Video Başlığı:');
+      if (!title) return;
+      const type = confirm('Bu kayıt bir VİDEO mu? (Tamam: Video, İptal: Ses Kaydı/MP3)') ? 'video' : 'audio';
+      const link = prompt(type === 'video' ? 'YouTube / Video Linki:' : 'MP3 / Ses Kaydı Linki:');
+
+      if (!appData.media) appData.media = [];
+      appData.media.unshift({
+        id: 'med-' + Date.now(),
+        type: type,
+        title: title,
+        category: type === 'video' ? 'Seminer / Konferans' : 'Ders Kayıtları',
+        date: '2026',
+        duration: '45 dk',
+        audioUrl: type === 'audio' ? (link || '') : '',
+        youtubeUrl: type === 'video' ? (link || '') : '',
+        description: 'Bu ilmi kayıtta ele alınan usûl ve fıkıh meseleleri.'
+      });
+
+      saveAllChanges(true);
+      renderMediaManagement();
+      renderDashboard();
+    }
+
+    function deleteMedia(idx) {
+      if (confirm('Bu medya kaydını silmek istediğinize emin misiniz?')) {
+        appData.media.splice(idx, 1);
+        saveAllChanges(true);
+        renderMediaManagement();
+        renderDashboard();
+      }
+    }
+
+    function renderBlogManagement() {
+      const container = document.getElementById('blog-management-list');
+      if (!container) return;
+      const blogs = appData.blog || [];
+
+      if (blogs.length === 0) {
+        container.innerHTML = '<div class="p-6 text-center text-slate-400 text-xs">Henüz yazı bulunmuyor.</div>';
+        return;
+      }
+
+      container.innerHTML = blogs.map((b, idx) => `
+        <div class="p-4 rounded-xl border border-slate-200 bg-white shadow-xs space-y-2">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold text-slate-500">${b.category || 'İlmi Notlar'} &bull; ${b.date || ''}</span>
+            <button onclick="deleteBlog(${idx})" class="text-rose-500 hover:text-rose-700 text-xs font-bold">Sil</button>
+          </div>
+          <h4 class="font-bold text-sm text-[#1E2D3D]">${b.title}</h4>
+          <p class="text-xs text-slate-600 line-clamp-2">${b.summary || ''}</p>
+        </div>
+      `).join('');
+
+      if (window.lucide) lucide.createIcons();
+    }
+
+    function openNewBlogModal() {
+      const title = prompt('Yazı Başlığı:');
+      if (!title) return;
+      const summary = prompt('Yazı Özeti:');
+      const content = prompt('Yazının Tam Metni:');
+
+      if (!appData.blog) appData.blog = [];
+      appData.blog.unshift({
+        id: 'blog-' + Date.now(),
+        title: title,
+        date: '11 Kasım 2026',
+        category: 'İlmi Notlar',
+        readTime: '5 dk okuma',
+        summary: summary || '',
+        content: content || summary || ''
+      });
+
+      saveAllChanges(true);
+      renderBlogManagement();
+      renderDashboard();
+    }
+
+    function deleteBlog(idx) {
+      if (confirm('Bu yazıyı silmek istediğinize emin misiniz?')) {
+        appData.blog.splice(idx, 1);
+        saveAllChanges(true);
+        renderBlogManagement();
+        renderDashboard();
+      }
+    }
+
+    function renderForumManagement() {
+      const container = document.getElementById('forum-management-list');
+      if (!container) return;
+      const topics = appData.forumTopics || [];
+
+      container.innerHTML = topics.map((t, idx) => `
+        <div class="p-4 rounded-xl border border-slate-200 bg-white shadow-xs flex items-center justify-between gap-3">
+          <div>
+            <div class="font-bold text-xs sm:text-sm text-[#1E2D3D]">${t.title}</div>
+            <div class="text-[11px] text-slate-400 mt-0.5">${t.author || 'Yönetici'} &bull; ${t.category || ''} &bull; ${t.repliesCount || 0} Yanıt</div>
+          </div>
+          <button onclick="deleteForumTopic(${idx})" class="text-rose-500 hover:text-rose-700 text-xs font-bold">Sil</button>
+        </div>
+      `).join('');
+
+      if (window.lucide) lucide.createIcons();
+    }
+
+    function openNewForumModal() {
+      const title = prompt('Müzakere / Forum Başlığı:');
+      if (!title) return;
+      const cat = prompt('Kategori (örn: Fıkıh Usûlü):');
+
+      if (!appData.forumTopics) appData.forumTopics = [];
+      appData.forumTopics.unshift({
+        id: 'forum-' + Date.now(),
+        title: title,
+        author: 'Amil Salih Güngören',
+        date: '11 Kasım 2026',
+        category: cat || 'Genel Tartışma',
+        repliesCount: 0,
+        summary: 'Bu başlık altında ilmi mütalaalar yürütülmektedir.'
+      });
+
+      saveAllChanges(true);
+      renderForumManagement();
+      renderDashboard();
+    }
+
+    function deleteForumTopic(idx) {
+      if (confirm('Bu tartışma başlığını silmek istediğinize emin misiniz?')) {
+        appData.forumTopics.splice(idx, 1);
+        saveAllChanges(true);
+        renderForumManagement();
+      }
+    }
+
+    /* ================= 10. CANLI SİTE ÖNİZLEME (IFRAME) ================= */
+    function setIframeDevice(width) {
+      const iframe = document.getElementById('preview-iframe');
+      if (iframe) iframe.style.width = width;
+    }
+
+    function reloadPreviewIframe() {
+      const iframe = document.getElementById('preview-iframe');
+      if (iframe) iframe.src = 'index.html?t=' + Date.now();
+    }
+
+    /* ================= 11. YEDEKLEME & DIŞA AKTAR ================= */
+    function exportDataJs() {
+      const fileContent = `// Amil Salih Güngören - Güncel Özgeçmiş & Kitap Külliyatı Veri Dosyası\n// Son Güncelleme: ${new Date().toLocaleString('tr-TR')}\n\nconst portfolioData = ${JSON.stringify(appData, null, 2)};\n\nif (typeof module !== 'undefined' && module.exports) {\n  module.exports = portfolioData;\n}\n`;
+
+      const blob = new Blob([fileContent], { type: 'application/javascript;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'data.js';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      showToast('data.js dosyası başarıyla indirildi!');
+    }
+
+    function exportJsonBackup() {
+      const blob = new Blob([JSON.stringify(appData, null, 2)], { type: 'application/json;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `amil-salih-portfolyo-yedek-${new Date().toISOString().slice(0, 10)}.json`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      showToast('JSON tam yedeği indirildi!');
+    }
+
+    function importJsonBackup(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function(evt) {
+        try {
+          const imported = JSON.parse(evt.target.result);
+          if (imported && imported.profile) {
+            appData = imported;
+            saveAllChanges(true);
+            renderAllSections();
+            alert('Yedek başarıyla yüklendi!');
+          } else {
+            alert('Geçersiz yedek dosyası formatı!');
+          }
+        } catch (err) {
+          alert('Dosya okuma hatası: ' + err.message);
+        }
+      };
+      reader.readAsText(file);
+    }
+
+    function resetToDefaultData() {
+      if (confirm('DİKKAT: LocalStorage belleğindeki tüm düzenlemeler silinecek ve projenin orijinal data.js haline geri dönülecektir. Devam edilsin mi?')) {
+        localStorage.removeItem('amil_salih_portfolio_data');
+        const source = getSourceData();
+        appData = JSON.parse(JSON.stringify(source));
+        localStorage.setItem('amil_salih_portfolio_data', JSON.stringify(appData));
+        window.location.reload();
+      }
+    }
+
+    function changeAdminPassword() {
+      const cur = document.getElementById('cur-pass-input').value.trim();
+      const nxt = document.getElementById('new-pass-input').value.trim();
+      const stored = localStorage.getItem('amil_salih_admin_password') || '1234';
+
+      if (cur !== stored) {
+        alert('Mevcut şifreniz hatalı!');
+        return;
+      }
+      if (!nxt || nxt.length < 4) {
+        alert('Yeni şifre en az 4 karakter olmalıdır!');
+        return;
+      }
+
+      localStorage.setItem('amil_salih_admin_password', nxt);
+      alert('Şifreniz başarıyla değiştirildi!');
+      document.getElementById('cur-pass-input').value = '';
+      document.getElementById('new-pass-input').value = '';
+    }
+
+    // Başlangıç Kontrolleri
+    document.addEventListener('DOMContentLoaded', () => {
+      initAppData();
+      if (sessionStorage.getItem('amil_salih_logged_in') === 'true') {
+        document.getElementById('login-screen').classList.add('hidden');
+        document.getElementById('admin-app').classList.remove('hidden');
+        renderAllSections();
+      }
+
+      // Modal dışına tıklayınca ve ESC tuşunda modal kapatma desteği
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+          AdminModalManager.closeCurrent();
+        }
+      });
+
+      ['book-edit-modal', 'edu-edit-modal', 'exp-edit-modal', 'page-edit-modal'].forEach(id => {
+        const modal = document.getElementById(id);
+        if (modal) {
+          modal.addEventListener('click', (e) => {
+            if (e.target === modal) AdminModalManager.close(id);
+          });
+        }
+      });
+
+      if (window.lucide) lucide.createIcons();
+    });
+  </script>
+</body>
+</html>
