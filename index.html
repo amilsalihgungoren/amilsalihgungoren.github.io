@@ -58,7 +58,7 @@
   <script src="https://unpkg.com/lucide@latest"></script>
 
   <!-- Özel Stiller -->
-  <link rel="stylesheet" href="assets/css/style.css?v=2.5">
+  <link rel="stylesheet" href="assets/css/style.css?v=2.6">
 </head>
 <body class="min-h-screen py-6 px-3 sm:px-6 lg:px-8 selection:bg-[#1E2D3D] selection:text-white">
 
@@ -367,11 +367,11 @@
   </main>
 
   <!-- ================= KİTAP DETAY & SATIN ALMA MODAL'I ================= -->
-  <div id="book-detail-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-slate-950/70 backdrop-blur-sm p-4 overflow-y-auto">
-    <div class="relative w-full max-w-2xl rounded-3xl bg-white border border-slate-200 shadow-2xl p-6 sm:p-8 my-8">
+  <div id="book-detail-modal" class="fixed inset-0 z-50 hidden items-start justify-center bg-slate-950/75 backdrop-blur-sm p-3 sm:p-6 pt-4 sm:pt-8 pb-12 overflow-y-auto">
+    <div class="relative w-full max-w-2xl rounded-3xl bg-white border border-slate-200 shadow-2xl p-5 sm:p-8 my-2 sm:my-auto">
       
-      <!-- Kapat Butonu -->
-      <button onclick="closeBookModal()" class="absolute top-5 right-5 p-2 rounded-full text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors" aria-label="Kapat">
+      <!-- Kapat Butonu (Mobil ve Masaüstü için Belirgin, Dokunmatik Dostu X Çarpı Butonu) -->
+      <button type="button" onclick="closeBookModal()" class="absolute top-3.5 right-3.5 sm:top-5 sm:right-5 w-10 h-10 rounded-full bg-slate-100 hover:bg-slate-200 active:bg-slate-300 text-slate-700 flex items-center justify-center transition-all shadow-xs z-30" aria-label="Pencereyi Kapat" title="Kapat">
         <i data-lucide="x" class="w-5 h-5"></i>
       </button>
 
@@ -382,11 +382,11 @@
   </div>
 
   <!-- ================= SERTİFİKA / BELGE MODAL'I ================= -->
-  <div id="cert-detail-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-slate-950/70 backdrop-blur-sm p-4 overflow-y-auto">
-    <div class="relative w-full max-w-lg rounded-3xl bg-white border border-slate-200 shadow-2xl p-6 sm:p-8 my-8">
+  <div id="cert-detail-modal" class="fixed inset-0 z-50 hidden items-start justify-center bg-slate-950/75 backdrop-blur-sm p-3 sm:p-6 pt-4 sm:pt-8 pb-12 overflow-y-auto">
+    <div class="relative w-full max-w-lg rounded-3xl bg-white border border-slate-200 shadow-2xl p-5 sm:p-8 my-2 sm:my-auto">
       
       <!-- Kapat Butonu -->
-      <button onclick="closeCertModal()" class="absolute top-5 right-5 p-2 rounded-full text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors" aria-label="Kapat">
+      <button type="button" onclick="closeCertModal()" class="absolute top-3.5 right-3.5 sm:top-5 sm:right-5 w-10 h-10 rounded-full bg-slate-100 hover:bg-slate-200 active:bg-slate-300 text-slate-700 flex items-center justify-center transition-all shadow-xs z-30" aria-label="Pencereyi Kapat" title="Kapat">
         <i data-lucide="x" class="w-5 h-5"></i>
       </button>
 
@@ -397,9 +397,9 @@
   </div>
 
   <!-- ================= YAZI / MAKALE DETAY OKUMA MODAL'I ================= -->
-  <div id="article-detail-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-slate-950/70 backdrop-blur-sm p-4 overflow-y-auto">
-    <div class="relative w-full max-w-2xl rounded-3xl bg-white border border-slate-200 shadow-2xl p-6 sm:p-8 my-8">
-      <button onclick="closeArticleModal()" class="absolute top-5 right-5 p-2 rounded-full text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors" aria-label="Kapat">
+  <div id="article-detail-modal" class="fixed inset-0 z-50 hidden items-start justify-center bg-slate-950/75 backdrop-blur-sm p-3 sm:p-6 pt-4 sm:pt-8 pb-12 overflow-y-auto">
+    <div class="relative w-full max-w-2xl rounded-3xl bg-white border border-slate-200 shadow-2xl p-5 sm:p-8 my-2 sm:my-auto">
+      <button type="button" onclick="closeArticleModal()" class="absolute top-3.5 right-3.5 sm:top-5 sm:right-5 w-10 h-10 rounded-full bg-slate-100 hover:bg-slate-200 active:bg-slate-300 text-slate-700 flex items-center justify-center transition-all shadow-xs z-30" aria-label="Pencereyi Kapat" title="Kapat">
         <i data-lucide="x" class="w-5 h-5"></i>
       </button>
       <div id="article-modal-content"></div>
@@ -408,6 +408,6 @@
 
   <!-- Veri ve Scriptler -->
   <script src="assets/js/data.js?v=2.3"></script>
-  <script src="assets/js/main.js?v=2.4"></script>
+  <script src="assets/js/main.js?v=2.5"></script>
 </body>
 </html>

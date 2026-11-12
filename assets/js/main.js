@@ -434,6 +434,11 @@ const NavigationState = {
     });
 
     window.addEventListener('popstate', () => {
+      // Eğer bir açılır pencere (modal) açıksa, telefonun geri tuşu siteden çıkmak yerine modalı kapatır
+      if (typeof ModalManager !== 'undefined' && ModalManager.activeModalId) {
+        ModalManager.close(ModalManager.activeModalId, false);
+        return;
+      }
       const currentHash = window.location.hash.replace('#', '');
       if (currentHash && this.buttons.some(b => b.getAttribute('data-target') === currentHash)) {
         this.transitionTo(currentHash, false);
@@ -672,6 +677,12 @@ window.openBlogReadingModal = function(id) {
       <div class="text-xs sm:text-sm text-slate-700 leading-relaxed text-justify space-y-3 pt-3 border-t border-slate-100 max-h-[60vh] overflow-y-auto pr-2 custom-scrollbar">
         ${(b.content || b.summary || '').split('\\n\\n').map(p => `<p>${p}</p>`).join('')}
       </div>
+      <div class="pt-3 border-t border-slate-100 flex justify-end">
+        <button type="button" onclick="closeArticleModal()" class="px-5 py-2 rounded-xl border border-slate-300 text-slate-700 hover:bg-slate-100 active:bg-slate-200 font-semibold text-xs transition-colors flex items-center gap-1.5 shadow-2xs">
+          <i data-lucide="x" class="w-4 h-4"></i>
+          <span>Pencereyi Kapat</span>
+        </button>
+      </div>
     </div>
   `;
 
@@ -689,10 +700,11 @@ window.closeArticleModal = function() {
 const ModalManager = {
   activeModalId: null,
   lastTriggerElement: null,
+  isPoppingState: false,
 
   open(modalId, triggerElement = null) {
     if (this.activeModalId && this.activeModalId !== modalId) {
-      this.close(this.activeModalId);
+      this.close(this.activeModalId, false);
     }
 
     const modal = document.getElementById(modalId);
@@ -706,6 +718,16 @@ const ModalManager = {
     modal.setAttribute('aria-hidden', 'false');
     document.body.style.overflow = 'hidden';
 
+    // Mobil & Tablette Kırpılmayı Kesin Önleme: Kaydırmayı her açılışta en tepeye sıfırla
+    modal.scrollTop = 0;
+    const innerCard = modal.querySelector('.relative');
+    if (innerCard) innerCard.scrollTop = 0;
+
+    // Telefonun Geri Tuşu Desteği (Siteden çıkmadan pencereyi kapatmak için geçmişe state ekle)
+    try {
+      history.pushState({ modalOpen: modalId }, '');
+    } catch (e) {}
+
     // Erişilebilirlik: kapat butonuna veya ilk odaklanabilir öğeye odaklan
     const closeBtn = modal.querySelector('button[onclick*="close"], [data-close-modal]');
     if (closeBtn) closeBtn.focus();
@@ -713,7 +735,7 @@ const ModalManager = {
     if (window.lucide) lucide.createIcons();
   },
 
-  close(modalId) {
+  close(modalId = null, shouldPopHistory = true) {
     const targetId = modalId || this.activeModalId;
     if (!targetId) return;
 
@@ -731,6 +753,15 @@ const ModalManager = {
         try { this.lastTriggerElement.focus(); } catch (e) {}
       }
       this.lastTriggerElement = null;
+    }
+
+    // Kullanıcı arayüzdeki butonla veya dışarı tıklayarak kapattıysa tarayıcı geçmişini temizle
+    if (shouldPopHistory && history.state && history.state.modalOpen) {
+      this.isPoppingState = true;
+      try {
+        history.back();
+      } catch (e) {}
+      setTimeout(() => { this.isPoppingState = false; }, 120);
     }
   },
 
@@ -767,22 +798,22 @@ window.openBookModal = function(id, type) {
   let coverHtml = '';
   if (pub.coverImage) {
     coverHtml = `
-      <div class="w-full max-w-[240px] aspect-[1/1.45] rounded-xl overflow-hidden shadow-2xl border border-slate-200 bg-white p-2.5 flex items-center justify-center mx-auto">
+      <div class="w-full max-w-[190px] sm:max-w-[240px] aspect-[1/1.45] rounded-xl overflow-hidden shadow-xl border border-slate-200 bg-white p-2 flex items-center justify-center mx-auto">
         <img src="${pub.coverImage}" alt="${pub.title}" class="max-w-full max-h-full object-contain block rounded-sm shadow-sm" onerror="if(!this.dataset.retried){this.dataset.retried='1';this.src=this.src.includes('Mecelle.jpeg')?this.src.replace('Mecelle.jpeg','mecelle.jpeg'):this.src.replace('mecelle.jpeg','Mecelle.jpeg');}">
       </div>
     `;
   } else {
     coverHtml = `
-      <div class="w-full max-w-[230px] aspect-[1/1.45] rounded-xl p-6 shadow-2xl book-theme-${pub.coverTheme || 'amber'} flex flex-col justify-between relative overflow-hidden border-l-4 border-white/40">
+      <div class="w-full max-w-[190px] sm:max-w-[230px] aspect-[1/1.45] rounded-xl p-5 shadow-xl book-theme-${pub.coverTheme || 'amber'} flex flex-col justify-between relative overflow-hidden border-l-4 border-white/40 mx-auto">
         <div>
           <span class="text-[11px] uppercase tracking-wider font-semibold opacity-80">${pub.role || 'Yayın'}</span>
           <div class="text-xs uppercase font-bold tracking-wide mt-1.5">${pub.author}</div>
         </div>
         <div>
-          <h3 class="text-lg font-bold leading-tight font-serif-cv">${pub.title}</h3>
+          <h3 class="text-base sm:text-lg font-bold leading-tight font-serif-cv">${pub.title}</h3>
           ${pub.turkishTitle ? `<p class="text-xs opacity-90 italic mt-1">${pub.turkishTitle}</p>` : ''}
         </div>
-        <div class="pt-3 border-t border-white/20 flex items-center justify-between text-xs opacity-80">
+        <div class="pt-2.5 border-t border-white/20 flex items-center justify-between text-xs opacity-80">
           <span>${pub.publisher}</span>
           <span>${pub.year}</span>
         </div>
@@ -848,6 +879,12 @@ window.openBookModal = function(id, type) {
             <span>Amil Salih Güngören Kitapyurdu Yazar Sayfası</span>
             <i data-lucide="external-link" class="w-3 h-3"></i>
           </a>
+
+          <!-- Mobilde & Tablette Hızlı Kapat Butonu -->
+          <button type="button" onclick="closeBookModal()" class="w-full sm:w-auto mt-2 px-6 py-2.5 rounded-xl border border-slate-300 text-slate-700 hover:bg-slate-100 active:bg-slate-200 font-semibold text-xs sm:text-sm transition-colors flex items-center justify-center gap-1.5 shadow-2xs">
+            <i data-lucide="x" class="w-4 h-4"></i>
+            <span>Pencereyi Kapat</span>
+          </button>
         </div>
 
       </div>
@@ -902,6 +939,14 @@ window.openCertificateModal = function(id) {
         <div class="p-3.5 bg-amber-50 border border-amber-200/80 rounded-xl text-xs sm:text-sm text-amber-900 inline-block">
           <i data-lucide="info" class="w-4 h-4 inline mr-1 text-amber-700"></i>
           Resmi yemin tutanağı taraması mevcuttur; kurumsal doğrulama talepleri için iletişime geçebilirsiniz.
+        </div>
+
+        <!-- Mobilde Kolay Kapatma Butonu -->
+        <div class="pt-2 flex justify-center">
+          <button type="button" onclick="closeCertModal()" class="px-6 py-2.5 rounded-xl border border-slate-300 text-slate-700 hover:bg-slate-100 active:bg-slate-200 font-semibold text-xs sm:text-sm transition-colors flex items-center justify-center gap-1.5 shadow-2xs">
+            <i data-lucide="x" class="w-4 h-4"></i>
+            <span>Pencereyi Kapat</span>
+          </button>
         </div>
 
       </div>
