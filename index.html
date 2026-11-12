@@ -58,7 +58,7 @@
   <script src="https://unpkg.com/lucide@latest"></script>
 
   <!-- Özel Stiller -->
-  <link rel="stylesheet" href="assets/css/style.css?v=2.4">
+  <link rel="stylesheet" href="assets/css/style.css?v=2.5">
 </head>
 <body class="min-h-screen py-6 px-3 sm:px-6 lg:px-8 selection:bg-[#1E2D3D] selection:text-white">
 
@@ -76,7 +76,7 @@
   <main class="max-w-5xl mx-auto cv-page-sheet rounded-2xl overflow-hidden mb-12">
     
     <!-- 1. ÜST BANNER (HEADER - FOTOĞRAF VE İLETİŞİM KUTUSU BİREBİR CETVEL HİZALI, İSİM & ÜNVAN EN AŞAĞIYA YASLI) -->
-    <header class="bg-[#1E2D3D] text-white border-b border-[#2A3C4E]">
+    <header id="cv-main-header" class="bg-[#1E2D3D] text-white border-b border-[#2A3C4E]">
       <div class="grid grid-cols-1 md:grid-cols-12">
         
         <!-- Sol: Fotoğraf (Aşağıdaki İletişim Kutusuyla Birebir Aynı Kolon, Aynı Padding ve Milimetrik Aynı Hizada) -->
@@ -143,10 +143,10 @@
     </header>
 
     <!-- 2. ANA GÖVDE: 2 KOLONLU DÜZEN -->
-    <div class="grid grid-cols-1 md:grid-cols-12 min-h-[900px]">
+    <div id="cv-grid-container" class="grid grid-cols-1 md:grid-cols-12 min-h-[900px]">
       
       <!-- ================= SOL SÜTUN (SABİT BİLGİLER - GENİŞLETİLMİŞ VE YASLI) ================= -->
-      <aside class="md:col-span-5 lg:col-span-4 p-6 sm:p-7 bg-[#FAFCFF] border-r border-slate-200 space-y-7">
+      <aside id="cv-sidebar-aside" class="md:col-span-5 lg:col-span-4 p-6 sm:p-7 bg-[#FAFCFF] border-r border-slate-200 space-y-7">
         
         <!-- İletişim Kutusu (Fotoğrafla Birebir Genişlikte ve E-postalar Kesintisiz) -->
         <div class="w-full max-w-[295px] mx-auto">
@@ -190,7 +190,7 @@
       </aside>
 
       <!-- ================= SAĞ SÜTUN (SAYFA İÇERİKLERİ) ================= -->
-      <section class="md:col-span-7 lg:col-span-8 p-6 sm:p-10 bg-white">
+      <section id="cv-main-content-section" class="md:col-span-7 lg:col-span-8 p-6 sm:p-10 bg-white">
         
         <!-- ================= SAYFA 1: HAKKINDA & İŞ DENEYİMİ ================= -->
         <div id="page-1" class="cv-content-page space-y-10">
@@ -407,7 +407,7 @@
   </div>
 
   <!-- Veri ve Scriptler -->
-  <script src="assets/js/data.js?v=2.2"></script>
-  <script src="assets/js/main.js?v=2.2"></script>
+  <script src="assets/js/data.js?v=2.3"></script>
+  <script src="assets/js/main.js?v=2.4"></script>
 </body>
 </html>

@@ -1067,6 +1067,14 @@
           const hasProfile = parsed.profile && parsed.profile.name;
 
           if (hasBooks && hasProfile) {
+            // Mecelle kapak yolu büyük/küçük harf onarımı (Linux GitHub Pages uyumluluğu)
+            if (parsed.editions) {
+              const mecelle = parsed.editions.find(e => e.id === 'e-3' || (e.title && e.title.includes('Mecelle')));
+              if (mecelle && mecelle.coverImage && mecelle.coverImage.includes('mecelle.jpeg')) {
+                mecelle.coverImage = 'assets/images/covers/Mecelle.jpeg';
+                localStorage.setItem('amil_salih_portfolio_data', JSON.stringify(parsed));
+              }
+            }
             appData = parsed;
           } else {
             console.warn('LocalStorage belleğindeki veri boş tespit edildi. data.js dosyasından yükleniyor...');

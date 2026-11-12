@@ -522,7 +522,7 @@ var portfolioData = {
       "publisher": "Tin Yayınları",
       "year": "2025",
       "role": "Edisyon & Düzelti",
-      "coverImage": "assets/images/covers/mecelle.jpeg",
+      "coverImage": "assets/images/covers/Mecelle.jpeg",
       "coverTheme": "navy",
       "description": "Ahlak kâidesi, sağlık kâidesi, siyaset kâidesi, içtimal kâide gibi herhangi bir bilim dalında \"şümulüne giren olay ve olguların tamamında uygulanabilen umumi ve özlü hükümlere, kaziyelere külli kâide denir. Külli kâideler, yapıları gereği başka bir kaidenin altına girmeyen tümel önermelerdir. Bundan dolayı külli denilmektedir. Çoğulu kavâid-i külliye'dir. Fıkıh ilmindeki külli kâideler fıkıh usulünün bir parçasını oluşturmaktadır. Fıkıh ilmi külli kâideler açısından oldukça zengindir. İslam fıkhındaki külli kâideler, gerek Kur'an ve sünnetten hüküm çıkarırken gerekse de çıkarılmış hükümleri pratik hadiselere tatbik ederken şablon görevi ifa eder. Ayrıca ilmi münazaralarda yanlış düşünceleri tespit ve doğru düşünceleri temellendirme konusunda nesnel role sahiptir. Ahkam-ı Fıkhıyyenin külli kâideleri hem bunu ifadelendiren Müslüman ilim adamların hem de bunu içselleştirip pratik hayatın nerdeyse her boyutunda kullanan Müslüman toplumun zihin dünyasının, adalet ve hakkaniyet anlayışının dışa yansıyan tezahürüdür. İlim geleneğimizin külli kâideler alanında en mümtaz ve zirve çalışmalarından olan Mecelle ise işbu kitapta detaylıca incelenmiş ve genel fıkıh aklını oluşturan kâidelerin her biri detaylıca şerh edilmiştir. Buna ek olarak Mecelle'nin dışında kalan ama külli kâideler çatısı altında toplanabilecek sair maddeler de cem maksadıyla bir araya getirilmiş ve zeyl olarak bazı yeni ilave hükümler de kitapta ele alınmıştır.",
       "kunye": {

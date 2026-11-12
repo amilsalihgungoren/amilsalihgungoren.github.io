@@ -24,6 +24,15 @@
           customData.pages[5].active = false;
           customData.pages[6].active = false;
         }
+
+        // Mecelle kapak görseli dosya adı onarımı (Linux/GitHub Pages büyük-küçük harf duyarlılığı)
+        if (customData.editions) {
+          const mecelle = customData.editions.find(e => e.id === 'e-3' || (e.title && e.title.includes('Mecelle')));
+          if (mecelle && mecelle.coverImage && mecelle.coverImage.includes('mecelle.jpeg')) {
+            mecelle.coverImage = 'assets/images/covers/Mecelle.jpeg';
+          }
+        }
+
         window.portfolioData = customData;
       } else {
         console.warn('LocalStorage verisi boş veya eksik tespit edildi; orijinal data.js baz alınıyor.');
@@ -315,7 +324,7 @@ function renderPage2() {
       if (pub.coverImage) {
         return `
           <div class="gallery-book-card has-cover" onclick="openBookModal('${pub.id}', 'translation')" title="${pub.turkishTitle || pub.title} (${pub.year})">
-            <img src="${pub.coverImage}" alt="${pub.title}" loading="lazy">
+            <img src="${pub.coverImage}" alt="${pub.title}" loading="lazy" onerror="if(!this.dataset.retried){this.dataset.retried='1';this.src=this.src.includes('Mecelle.jpeg')?this.src.replace('Mecelle.jpeg','mecelle.jpeg'):this.src.replace('mecelle.jpeg','Mecelle.jpeg');}">
           </div>
         `;
       } else {
@@ -358,7 +367,7 @@ function renderPage3() {
       if (pub.coverImage) {
         return `
           <div class="gallery-book-card has-cover" onclick="openBookModal('${pub.id}', 'edition')" title="${pub.title} (${pub.year})">
-            <img src="${pub.coverImage}" alt="${pub.title}" loading="lazy">
+            <img src="${pub.coverImage}" alt="${pub.title}" loading="lazy" onerror="if(!this.dataset.retried){this.dataset.retried='1';this.src=this.src.includes('Mecelle.jpeg')?this.src.replace('Mecelle.jpeg','mecelle.jpeg'):this.src.replace('mecelle.jpeg','Mecelle.jpeg');}">
           </div>
         `;
       } else {
@@ -438,6 +447,14 @@ const NavigationState = {
     if (!pageId || this.currentPageId === pageId) return; // İdempotent koruma
 
     this.currentPageId = pageId;
+
+    // Mobil & Tablette (<1024px) Özgeçmiş dışındaki sayfalarda (Tercümeler, Edisyonlar vb.)
+    // CV/profil sütununu gizleyip doğrudan yayınlar ve galeriyi en tepeye getir
+    if (pageId === 'page-1') {
+      document.body.classList.remove('subpage-active');
+    } else {
+      document.body.classList.add('subpage-active');
+    }
 
     // 1. Sekme Butonlarının Durumunu Güncelle (ARIA & Tasarım)
     this.buttons.forEach(btn => {
@@ -751,7 +768,7 @@ window.openBookModal = function(id, type) {
   if (pub.coverImage) {
     coverHtml = `
       <div class="w-full max-w-[240px] aspect-[1/1.45] rounded-xl overflow-hidden shadow-2xl border border-slate-200 bg-white p-2.5 flex items-center justify-center mx-auto">
-        <img src="${pub.coverImage}" alt="${pub.title}" class="max-w-full max-h-full object-contain block rounded-sm shadow-sm">
+        <img src="${pub.coverImage}" alt="${pub.title}" class="max-w-full max-h-full object-contain block rounded-sm shadow-sm" onerror="if(!this.dataset.retried){this.dataset.retried='1';this.src=this.src.includes('Mecelle.jpeg')?this.src.replace('Mecelle.jpeg','mecelle.jpeg'):this.src.replace('mecelle.jpeg','Mecelle.jpeg');}">
       </div>
     `;
   } else {
